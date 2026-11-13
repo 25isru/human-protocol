@@ -9,6 +9,7 @@
     "build:single": "vite build --mode single",
     "test": "vitest run",
     "calibrate": "tsx scripts/calibrate.ts",
+    "validate": "tsx scripts/validate.ts",
     "data": "python3 scripts/build_data.py"
   },
   "dependencies": {

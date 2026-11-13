@@ -41,15 +41,18 @@ export function formatValue(spec: TraitSpec, t: RolledTrait, reg: Registry): str
   return String(v);
 }
 
-/** "women aged 30 to 34 in Sweden" from the stratum that was actually used. */
-function group(t: RolledTrait, reg: Registry, profile: Profile): string {
-  const s = t.trace.stratum;
-  const sex = s["frame.sex"] ?? (t.trace.modifiers.length ? String(profile.traits["frame.sex"].value) : undefined);
+/** "women aged 30 to 34 in Sweden" from a stratum. */
+export function groupLabel(s: Record<string, string>, reg: Registry, sexHint?: string): string {
+  const sex = s["frame.sex"] ?? sexHint;
   let who = sex === "male" ? "men" : sex === "female" ? "women" : "people";
   if (s["frame.age_group"]) who += ` aged ${s["frame.age_group"].replace("--", " to ").replace("100+", "100 or over")}`;
   if (s["frame.birth_cohort"]) who += ` born ${s["frame.birth_cohort"]} to ${Number(s["frame.birth_cohort"]) + 4}`;
   if (s["frame.country"]) who += ` in ${placeName(s["frame.country"], reg)}`;
   return who;
+}
+
+function group(t: RolledTrait, reg: Registry, profile: Profile): string {
+  return groupLabel(t.trace.stratum, reg, t.trace.modifiers.length ? String(profile.traits["frame.sex"].value) : undefined);
 }
 
 export function explain(spec: TraitSpec, t: RolledTrait, reg: Registry, profile: Profile): string[] {

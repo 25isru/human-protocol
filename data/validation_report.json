@@ -1,0 +1,912 @@
+{
+ "registry_version": "43d561a0",
+ "people": 300000,
+ "traits": [
+  {
+   "id": "frame.country",
+   "label": "Country of residence",
+   "examples": [
+    {
+     "stratum": {},
+     "what": "356",
+     "expected": 17.79,
+     "simulated": 17.69,
+     "unit": "%",
+     "n": 300000
+    }
+   ],
+   "gates": [
+    {
+     "id": "schema",
+     "name": "Well-formed data",
+     "status": "pass",
+     "detail": "1 row checked"
+    },
+    {
+     "id": "citation",
+     "name": "Every figure has a source",
+     "status": "pass",
+     "detail": "1 source"
+    },
+    {
+     "id": "effects",
+     "name": "Adjustments within plausible bounds",
+     "status": "skip",
+     "detail": "no adjustments"
+    },
+    {
+     "id": "marginal",
+     "name": "Simulated population matches the source",
+     "status": "pass",
+     "detail": "1 group checked, all within the allowed margin; the largest group is off by 0.10 percentage points"
+    },
+    {
+     "id": "conditional",
+     "name": "Adjustments reproduce their sourced effect",
+     "status": "skip",
+     "detail": "no adjustments"
+    }
+   ]
+  },
+  {
+   "id": "frame.sex",
+   "label": "Sex",
+   "examples": [
+    {
+     "stratum": {
+      "frame.country": "356"
+     },
+     "what": "male",
+     "expected": 51.54,
+     "simulated": 51.52,
+     "unit": "%",
+     "n": 53067
+    },
+    {
+     "stratum": {
+      "frame.country": "156"
+     },
+     "what": "male",
+     "expected": 50.86,
+     "simulated": 51.07,
+     "unit": "%",
+     "n": 51076
+    },
+    {
+     "stratum": {
+      "frame.country": "840"
+     },
+     "what": "male",
+     "expected": 50.26,
+     "simulated": 50.85,
+     "unit": "%",
+     "n": 12310
+    },
+    {
+     "stratum": {
+      "frame.country": "360"
+     },
+     "what": "male",
+     "expected": 50.23,
+     "simulated": 50.77,
+     "unit": "%",
+     "n": 10460
+    },
+    {
+     "stratum": {
+      "frame.country": "586"
+     },
+     "what": "male",
+     "expected": 50.6,
+     "simulated": 50.48,
+     "unit": "%",
+     "n": 9392
+    },
+    {
+     "stratum": {
+      "frame.country": "566"
+     },
+     "what": "male",
+     "expected": 50.63,
+     "simulated": 50.33,
+     "unit": "%",
+     "n": 8731
+    }
+   ],
+   "gates": [
+    {
+     "id": "schema",
+     "name": "Well-formed data",
+     "status": "pass",
+     "detail": "236 rows checked"
+    },
+    {
+     "id": "citation",
+     "name": "Every figure has a source",
+     "status": "pass",
+     "detail": "1 source"
+    },
+    {
+     "id": "effects",
+     "name": "Adjustments within plausible bounds",
+     "status": "skip",
+     "detail": "no adjustments"
+    },
+    {
+     "id": "marginal",
+     "name": "Simulated population matches the source",
+     "status": "pass",
+     "detail": "87 groups checked, all within the allowed margin; the largest group is off by 0.02 percentage points"
+    },
+    {
+     "id": "conditional",
+     "name": "Adjustments reproduce their sourced effect",
+     "status": "skip",
+     "detail": "no adjustments"
+    }
+   ]
+  },
+  {
+   "id": "frame.age",
+   "label": "Age",
+   "examples": [
+    {
+     "stratum": {
+      "frame.country": "356",
+      "frame.sex": "male"
+     },
+     "what": "25",
+     "expected": 1.79,
+     "simulated": 1.74,
+     "unit": "%",
+     "n": 27341
+    },
+    {
+     "stratum": {
+      "frame.country": "156",
+      "frame.sex": "male"
+     },
+     "what": "36",
+     "expected": 1.88,
+     "simulated": 1.84,
+     "unit": "%",
+     "n": 26084
+    },
+    {
+     "stratum": {
+      "frame.country": "356",
+      "frame.sex": "female"
+     },
+     "what": "25",
+     "expected": 1.73,
+     "simulated": 1.83,
+     "unit": "%",
+     "n": 25726
+    },
+    {
+     "stratum": {
+      "frame.country": "156",
+      "frame.sex": "female"
+     },
+     "what": "56",
+     "expected": 1.81,
+     "simulated": 1.82,
+     "unit": "%",
+     "n": 24992
+    },
+    {
+     "stratum": {
+      "frame.country": "840",
+      "frame.sex": "male"
+     },
+     "what": "36",
+     "expected": 1.47,
+     "simulated": 1.44,
+     "unit": "%",
+     "n": 6260
+    },
+    {
+     "stratum": {
+      "frame.country": "840",
+      "frame.sex": "female"
+     },
+     "what": "36",
+     "expected": 1.39,
+     "simulated": 1.34,
+     "unit": "%",
+     "n": 6050
+    }
+   ],
+   "gates": [
+    {
+     "id": "schema",
+     "name": "Well-formed data",
+     "status": "pass",
+     "detail": "472 rows checked"
+    },
+    {
+     "id": "citation",
+     "name": "Every figure has a source",
+     "status": "pass",
+     "detail": "1 source"
+    },
+    {
+     "id": "effects",
+     "name": "Adjustments within plausible bounds",
+     "status": "skip",
+     "detail": "no adjustments"
+    },
+    {
+     "id": "marginal",
+     "name": "Simulated population matches the source",
+     "status": "pass",
+     "detail": "126 groups checked, all within the allowed margin; the largest group is off by 0.05 percentage points"
+    },
+    {
+     "id": "conditional",
+     "name": "Adjustments reproduce their sourced effect",
+     "status": "skip",
+     "detail": "no adjustments"
+    }
+   ]
+  },
+  {
+   "id": "frame.age_group",
+   "label": "Age group",
+   "examples": [],
+   "gates": [
+    {
+     "id": "schema",
+     "name": "Well-formed data",
+     "status": "pass",
+     "detail": "derived trait"
+    },
+    {
+     "id": "citation",
+     "name": "Every figure has a source",
+     "status": "pass",
+     "detail": "0 sources"
+    },
+    {
+     "id": "effects",
+     "name": "Adjustments within plausible bounds",
+     "status": "skip",
+     "detail": "no adjustments"
+    },
+    {
+     "id": "marginal",
+     "name": "Simulated population matches the source",
+     "status": "skip",
+     "detail": "derived trait"
+    },
+    {
+     "id": "conditional",
+     "name": "Adjustments reproduce their sourced effect",
+     "status": "skip",
+     "detail": "no adjustments"
+    }
+   ]
+  },
+  {
+   "id": "frame.birth_year",
+   "label": "Birth year",
+   "examples": [],
+   "gates": [
+    {
+     "id": "schema",
+     "name": "Well-formed data",
+     "status": "pass",
+     "detail": "derived trait"
+    },
+    {
+     "id": "citation",
+     "name": "Every figure has a source",
+     "status": "pass",
+     "detail": "0 sources"
+    },
+    {
+     "id": "effects",
+     "name": "Adjustments within plausible bounds",
+     "status": "skip",
+     "detail": "no adjustments"
+    },
+    {
+     "id": "marginal",
+     "name": "Simulated population matches the source",
+     "status": "skip",
+     "detail": "derived trait"
+    },
+    {
+     "id": "conditional",
+     "name": "Adjustments reproduce their sourced effect",
+     "status": "skip",
+     "detail": "no adjustments"
+    }
+   ]
+  },
+  {
+   "id": "frame.birth_cohort",
+   "label": "Birth cohort",
+   "examples": [],
+   "gates": [
+    {
+     "id": "schema",
+     "name": "Well-formed data",
+     "status": "pass",
+     "detail": "derived trait"
+    },
+    {
+     "id": "citation",
+     "name": "Every figure has a source",
+     "status": "pass",
+     "detail": "0 sources"
+    },
+    {
+     "id": "effects",
+     "name": "Adjustments within plausible bounds",
+     "status": "skip",
+     "detail": "no adjustments"
+    },
+    {
+     "id": "marginal",
+     "name": "Simulated population matches the source",
+     "status": "skip",
+     "detail": "derived trait"
+    },
+    {
+     "id": "conditional",
+     "name": "Adjustments reproduce their sourced effect",
+     "status": "skip",
+     "detail": "no adjustments"
+    }
+   ]
+  },
+  {
+   "id": "geo.region",
+   "label": "Region",
+   "examples": [],
+   "gates": [
+    {
+     "id": "schema",
+     "name": "Well-formed data",
+     "status": "pass",
+     "detail": "derived trait"
+    },
+    {
+     "id": "citation",
+     "name": "Every figure has a source",
+     "status": "pass",
+     "detail": "1 source"
+    },
+    {
+     "id": "effects",
+     "name": "Adjustments within plausible bounds",
+     "status": "skip",
+     "detail": "no adjustments"
+    },
+    {
+     "id": "marginal",
+     "name": "Simulated population matches the source",
+     "status": "skip",
+     "detail": "derived trait"
+    },
+    {
+     "id": "conditional",
+     "name": "Adjustments reproduce their sourced effect",
+     "status": "skip",
+     "detail": "no adjustments"
+    }
+   ]
+  },
+  {
+   "id": "geo.subregion",
+   "label": "Subregion",
+   "examples": [],
+   "gates": [
+    {
+     "id": "schema",
+     "name": "Well-formed data",
+     "status": "pass",
+     "detail": "derived trait"
+    },
+    {
+     "id": "citation",
+     "name": "Every figure has a source",
+     "status": "pass",
+     "detail": "1 source"
+    },
+    {
+     "id": "effects",
+     "name": "Adjustments within plausible bounds",
+     "status": "skip",
+     "detail": "no adjustments"
+    },
+    {
+     "id": "marginal",
+     "name": "Simulated population matches the source",
+     "status": "skip",
+     "detail": "derived trait"
+    },
+    {
+     "id": "conditional",
+     "name": "Adjustments reproduce their sourced effect",
+     "status": "skip",
+     "detail": "no adjustments"
+    }
+   ]
+  },
+  {
+   "id": "origin.setting",
+   "label": "Lives in",
+   "examples": [
+    {
+     "stratum": {
+      "frame.country": "356"
+     },
+     "what": "rural",
+     "expected": 62.09,
+     "simulated": 62.05,
+     "unit": "%",
+     "n": 53067
+    },
+    {
+     "stratum": {
+      "frame.country": "156"
+     },
+     "what": "urban",
+     "expected": 67.38,
+     "simulated": 67.62,
+     "unit": "%",
+     "n": 51076
+    },
+    {
+     "stratum": {
+      "frame.country": "840"
+     },
+     "what": "urban",
+     "expected": 83.95,
+     "simulated": 84.17,
+     "unit": "%",
+     "n": 12310
+    },
+    {
+     "stratum": {
+      "frame.country": "360"
+     },
+     "what": "urban",
+     "expected": 60.45,
+     "simulated": 60.31,
+     "unit": "%",
+     "n": 10460
+    },
+    {
+     "stratum": {
+      "frame.country": "586"
+     },
+     "what": "rural",
+     "expected": 60.93,
+     "simulated": 60.8,
+     "unit": "%",
+     "n": 9392
+    },
+    {
+     "stratum": {
+      "frame.country": "566"
+     },
+     "what": "urban",
+     "expected": 56.48,
+     "simulated": 56.71,
+     "unit": "%",
+     "n": 8731
+    }
+   ],
+   "gates": [
+    {
+     "id": "schema",
+     "name": "Well-formed data",
+     "status": "pass",
+     "detail": "259 rows checked"
+    },
+    {
+     "id": "citation",
+     "name": "Every figure has a source",
+     "status": "pass",
+     "detail": "1 source"
+    },
+    {
+     "id": "effects",
+     "name": "Adjustments within plausible bounds",
+     "status": "skip",
+     "detail": "no adjustments"
+    },
+    {
+     "id": "marginal",
+     "name": "Simulated population matches the source",
+     "status": "pass",
+     "detail": "87 groups checked, all within the allowed margin; the largest group is off by 0.04 percentage points"
+    },
+    {
+     "id": "conditional",
+     "name": "Adjustments reproduce their sourced effect",
+     "status": "skip",
+     "detail": "no adjustments"
+    }
+   ]
+  },
+  {
+   "id": "body.height_cm",
+   "label": "Height",
+   "examples": [
+    {
+     "stratum": {
+      "frame.country": "356",
+      "frame.sex": "male",
+      "frame.birth_cohort": "1995"
+     },
+     "what": "average",
+     "expected": 164.95,
+     "simulated": 164.81,
+     "unit": "cm",
+     "n": 2432
+    },
+    {
+     "stratum": {
+      "frame.country": "156",
+      "frame.sex": "male",
+      "frame.birth_cohort": "1985"
+     },
+     "what": "average",
+     "expected": 170.76,
+     "simulated": 170.66,
+     "unit": "cm",
+     "n": 2262
+    },
+    {
+     "stratum": {
+      "frame.country": "356",
+      "frame.sex": "female",
+      "frame.birth_cohort": "1995"
+     },
+     "what": "average",
+     "expected": 152.58,
+     "simulated": 152.69,
+     "unit": "cm",
+     "n": 2152
+    },
+    {
+     "stratum": {
+      "frame.country": "356",
+      "frame.sex": "male",
+      "frame.birth_cohort": "1985"
+     },
+     "what": "average",
+     "expected": 165.1,
+     "simulated": 164.98,
+     "unit": "cm",
+     "n": 2120
+    },
+    {
+     "stratum": {
+      "frame.country": "156",
+      "frame.sex": "female",
+      "frame.birth_cohort": "1970"
+     },
+     "what": "average",
+     "expected": 158.07,
+     "simulated": 157.92,
+     "unit": "cm",
+     "n": 2115
+    },
+    {
+     "stratum": {
+      "frame.country": "356",
+      "frame.sex": "male",
+      "frame.birth_cohort": "1990"
+     },
+     "what": "average",
+     "expected": 165.01,
+     "simulated": 164.84,
+     "unit": "cm",
+     "n": 2101
+    }
+   ],
+   "gates": [
+    {
+     "id": "schema",
+     "name": "Well-formed data",
+     "status": "pass",
+     "detail": "9,618 rows checked"
+    },
+    {
+     "id": "citation",
+     "name": "Every figure has a source",
+     "status": "pass",
+     "detail": "2 sources"
+    },
+    {
+     "id": "effects",
+     "name": "Adjustments within plausible bounds",
+     "status": "skip",
+     "detail": "no adjustments"
+    },
+    {
+     "id": "marginal",
+     "name": "Simulated population matches the source",
+     "status": "pass",
+     "detail": "50 groups checked, all within the allowed margin; the largest group is off by 0.14 cm"
+    },
+    {
+     "id": "conditional",
+     "name": "Adjustments reproduce their sourced effect",
+     "status": "skip",
+     "detail": "no adjustments"
+    }
+   ]
+  },
+  {
+   "id": "body.left_handed",
+   "label": "Left-handed",
+   "examples": [
+    {
+     "stratum": {},
+     "what": "yes",
+     "expected": 10.6,
+     "simulated": 10.51,
+     "unit": "%",
+     "n": 300000
+    }
+   ],
+   "gates": [
+    {
+     "id": "schema",
+     "name": "Well-formed data",
+     "status": "pass",
+     "detail": "1 row checked"
+    },
+    {
+     "id": "citation",
+     "name": "Every figure has a source",
+     "status": "pass",
+     "detail": "2 sources"
+    },
+    {
+     "id": "effects",
+     "name": "Adjustments within plausible bounds",
+     "status": "pass",
+     "detail": "1 adjustment"
+    },
+    {
+     "id": "marginal",
+     "name": "Simulated population matches the source",
+     "status": "pass",
+     "detail": "1 group checked, all within the allowed margin; the largest group is off by 0.09 percentage points after adjustments and calibration"
+    },
+    {
+     "id": "conditional",
+     "name": "Adjustments reproduce their sourced effect",
+     "status": "pass",
+     "detail": "male: simulated odds ratio 1.24, source range 1.19 to 1.27"
+    }
+   ]
+  },
+  {
+   "id": "social.education",
+   "label": "Education",
+   "examples": [
+    {
+     "stratum": {
+      "frame.country": "356",
+      "frame.sex": "male",
+      "frame.age_group": "20--24"
+     },
+     "what": "Upper Secondary",
+     "expected": 45.6,
+     "simulated": 44.46,
+     "unit": "%",
+     "n": 2429
+    },
+    {
+     "stratum": {
+      "frame.country": "356",
+      "frame.sex": "male",
+      "frame.age_group": "15--19"
+     },
+     "what": "Upper Secondary",
+     "expected": 53.5,
+     "simulated": 54.03,
+     "unit": "%",
+     "n": 2419
+    },
+    {
+     "stratum": {
+      "frame.country": "356",
+      "frame.sex": "male",
+      "frame.age_group": "25--29"
+     },
+     "what": "Upper Secondary",
+     "expected": 36.6,
+     "simulated": 37.23,
+     "unit": "%",
+     "n": 2401
+    },
+    {
+     "stratum": {
+      "frame.country": "156",
+      "frame.sex": "male",
+      "frame.age_group": "35--39"
+     },
+     "what": "Lower Secondary",
+     "expected": 42.7,
+     "simulated": 43.59,
+     "unit": "%",
+     "n": 2331
+    },
+    {
+     "stratum": {
+      "frame.country": "356",
+      "frame.sex": "male",
+      "frame.age_group": "30--34"
+     },
+     "what": "Upper Secondary",
+     "expected": 32.7,
+     "simulated": 32.95,
+     "unit": "%",
+     "n": 2255
+    },
+    {
+     "stratum": {
+      "frame.country": "156",
+      "frame.sex": "female",
+      "frame.age_group": "55--59"
+     },
+     "what": "Lower Secondary",
+     "expected": 51.3,
+     "simulated": 51.47,
+     "unit": "%",
+     "n": 2207
+    }
+   ],
+   "gates": [
+    {
+     "id": "schema",
+     "name": "Well-formed data",
+     "status": "pass",
+     "detail": "7,895 rows checked"
+    },
+    {
+     "id": "citation",
+     "name": "Every figure has a source",
+     "status": "pass",
+     "detail": "1 source"
+    },
+    {
+     "id": "effects",
+     "name": "Adjustments within plausible bounds",
+     "status": "skip",
+     "detail": "no adjustments"
+    },
+    {
+     "id": "marginal",
+     "name": "Simulated population matches the source",
+     "status": "pass",
+     "detail": "74 groups checked, all within the allowed margin; the largest group is off by 1.14 percentage points"
+    },
+    {
+     "id": "conditional",
+     "name": "Adjustments reproduce their sourced effect",
+     "status": "skip",
+     "detail": "no adjustments"
+    }
+   ]
+  },
+  {
+   "id": "health.smoker_daily",
+   "label": "Smokes daily",
+   "examples": [
+    {
+     "stratum": {
+      "frame.country": "156",
+      "frame.sex": "male"
+     },
+     "what": "yes",
+     "expected": 46.5,
+     "simulated": 46.27,
+     "unit": "%",
+     "n": 22190
+    },
+    {
+     "stratum": {
+      "frame.country": "156",
+      "frame.sex": "female"
+     },
+     "what": "yes",
+     "expected": 2.2,
+     "simulated": 2.06,
+     "unit": "%",
+     "n": 21636
+    },
+    {
+     "stratum": {
+      "frame.country": "356",
+      "frame.sex": "male"
+     },
+     "what": "yes",
+     "expected": 21.9,
+     "simulated": 21.97,
+     "unit": "%",
+     "n": 20929
+    },
+    {
+     "stratum": {
+      "frame.country": "356",
+      "frame.sex": "female"
+     },
+     "what": "yes",
+     "expected": 2.9,
+     "simulated": 2.83,
+     "unit": "%",
+     "n": 19669
+    },
+    {
+     "stratum": {
+      "frame.country": "840",
+      "frame.sex": "male"
+     },
+     "what": "yes",
+     "expected": 16.9,
+     "simulated": 16.43,
+     "unit": "%",
+     "n": 5187
+    },
+    {
+     "stratum": {
+      "frame.country": "840",
+      "frame.sex": "female"
+     },
+     "what": "yes",
+     "expected": 13.7,
+     "simulated": 13.06,
+     "unit": "%",
+     "n": 5061
+    }
+   ],
+   "gates": [
+    {
+     "id": "schema",
+     "name": "Well-formed data",
+     "status": "pass",
+     "detail": "432 rows checked"
+    },
+    {
+     "id": "citation",
+     "name": "Every figure has a source",
+     "status": "pass",
+     "detail": "1 source"
+    },
+    {
+     "id": "effects",
+     "name": "Adjustments within plausible bounds",
+     "status": "skip",
+     "detail": "no adjustments"
+    },
+    {
+     "id": "marginal",
+     "name": "Simulated population matches the source",
+     "status": "pass",
+     "detail": "98 groups checked, all within the allowed margin; the largest group is off by 0.23 percentage points"
+    },
+    {
+     "id": "conditional",
+     "name": "Adjustments reproduce their sourced effect",
+     "status": "skip",
+     "detail": "no adjustments"
+    }
+   ]
+  }
+ ],
+ "summary": {
+  "traits": 13,
+  "passed": 13,
+  "failed": 0
+ }
+}
