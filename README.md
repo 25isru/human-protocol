@@ -11,7 +11,8 @@ evidence is, and the source.
 ```
 npm install
 npm run dev        # open the local address it prints
-npm test           # engine tests and the population accuracy test
+npm test           # engine tests, validation gates and the population accuracy test
+npm run validate   # re-run the gates and refresh the Accuracy page's report
 npm run build      # production site in dist/
 ```
 
@@ -26,6 +27,7 @@ Pushing to `main` runs the tests and publishes the site with GitHub Pages
 - `src/ui/`: the web page.
 - `scripts/build_data.py`: rebuilds the trait files from the raw datasets.
 - `scripts/calibrate.ts`: solves calibration offsets for traits with modifiers.
+- `src/validation/gates.ts`: the checks every trait must pass; results appear on the site's Accuracy tab.
 - `tests/population.test.ts`: rolls 300,000 people and checks the simulated population against the sources.
 
 Traits are rolled in dependency order (country → sex → age → everything else). A trait looks up the row

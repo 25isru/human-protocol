@@ -3,6 +3,7 @@ import { roll } from "../engine/roll";
 import { randomSeed } from "../engine/rng";
 import type { Profile, RolledTrait, TraitSpec, Value } from "../engine/types";
 import { registry } from "../registry";
+import { Accuracy } from "./Accuracy";
 import { GRADE_LABEL, explain, flag, formatValue, placeName } from "./explain";
 
 interface Pins { country: string; sex: string; age: string }
@@ -104,22 +105,26 @@ export function App() {
   const [pins, setPins] = useState<Pins>(initial.pins);
   const [seed, setSeed] = useState(initial.seed ?? randomSeed());
   const [copied, setCopied] = useState(false);
+  const [view, setView] = useState<"roll" | "accuracy">(window.location.hash === "#accuracy" ? "accuracy" : "roll");
 
   const result = useMemo(() => {
     try { return { profile: roll(registry, { seed, pins: toRequestPins(pins) }) }; }
     catch (e) { return { error: (e as Error).message }; }
   }, [seed, pins]);
 
-  useEffect(() => writeHash(seed, pins), [seed, pins]);
+  useEffect(() => {
+    if (view === "roll") writeHash(seed, pins);
+    else try { window.history.replaceState(null, "", "#accuracy"); } catch { /* sandboxed preview */ }
+  }, [seed, pins, view]);
   const reroll = useCallback(() => setSeed(randomSeed()), []);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement).tagName;
-      if (e.key === " " && tag !== "INPUT" && tag !== "SELECT" && tag !== "BUTTON") { e.preventDefault(); reroll(); }
+      if (e.key === " " && view === "roll" && tag !== "INPUT" && tag !== "SELECT" && tag !== "BUTTON") { e.preventDefault(); reroll(); }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [reroll]);
+  }, [reroll, view]);
 
   const countries = useMemo(() => Object.entries(registry.geo).sort((a, b) => a[1].name.localeCompare(b[1].name)), []);
   const visible = registry.order.map((id) => registry.traits.get(id)!).filter((s) => !s.hidden);
@@ -136,7 +141,14 @@ export function App() {
       <header className="top">
         <h1>Human Protocol</h1>
         <p>Roll a random living person, drawn from real population statistics.</p>
+        <nav className="tabs">
+          <button className={view === "roll" ? "is-active" : ""} onClick={() => setView("roll")}>Roll</button>
+          <button className={view === "accuracy" ? "is-active" : ""} onClick={() => setView("accuracy")}>Accuracy</button>
+        </nav>
       </header>
+
+      {view === "accuracy" && <Accuracy />}
+      {view === "roll" && (<>
 
       <section className="controls">
         <button className="roll" onClick={reroll}>Roll a human</button>
@@ -182,6 +194,8 @@ export function App() {
           </footer>
         </article>
       )}
+
+      </>)}
 
       <footer className="about">
         <p>Each value is rolled from figures for people like this one: the same country, sex and age where the data allows. Open any row to see the numbers and where they come from.</p>

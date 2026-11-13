@@ -57,3 +57,18 @@ code { font-family: ui-monospace, Menlo, monospace; }
   .trait-head { grid-template-columns: 6.5rem 1fr 1rem; padding: 13px 16px; } .trait-body { padding: 0 16px 16px; }
   .card-head { padding: 18px 16px; } .bar-row { grid-template-columns: 7.5rem 1fr 2.6rem; }
 }
+.tabs { display: flex; gap: 4px; margin-top: 16px; border-bottom: 1px solid var(--line); }
+.tabs button { background: none; border: 0; border-bottom: 2px solid transparent; padding: 8px 14px; font: inherit; color: var(--soft); cursor: pointer; margin-bottom: -1px; }
+.tabs button.is-active { color: var(--ink); border-bottom-color: var(--accent); font-weight: 600; }
+.accuracy { margin-top: 24px; font-size: 0.95rem; }
+.accuracy h2 { font-family: var(--serif); font-size: 1.4rem; margin: 0 0 8px; }
+.verdict { font-weight: 600; color: #2f7d4f; } .verdict.is-bad { color: var(--accent); }
+.acc-trait { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px 20px; margin-top: 14px; }
+.acc-trait h3 { margin: 0 0 8px; font-size: 1.05rem; }
+.gates { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 0.88rem; color: var(--soft); }
+.gate { display: grid; grid-template-columns: 1.2rem 1fr; } .gate strong { color: var(--ink); font-weight: 600; }
+.gate-pass .gate-mark { color: #2f7d4f; } .gate-fail .gate-mark, .gate-fail strong { color: var(--accent); }
+.acc-trait table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 0.85rem; }
+.acc-trait th { text-align: left; color: var(--soft); font-weight: 500; border-bottom: 1px solid var(--line); padding: 4px 6px 4px 0; }
+.acc-trait td { padding: 5px 6px 5px 0; border-bottom: 1px solid color-mix(in srgb, var(--line) 50%, transparent); vertical-align: top; }
+.acc-trait .num, .acc-trait th:nth-child(n+3) { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
