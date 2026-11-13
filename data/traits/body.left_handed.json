@@ -1,1 +1,54 @@
-{"id":"body.left_handed","version":1,"label":"Left-handed","tier":3,"definition":"Prefers the left hand for writing and similar tasks.","value_type":"boolean","parents":["frame.sex"],"baseline":{"keys":[],"backoff":[],"dist_kind":"bernoulli","table":{"":[0.106]}},"calibration_offset":-0.1083,"modifiers":[{"id":"male","when":{"trait":"frame.sex","op":"eq","value":"male"},"effect":{"kind":"log_odds","beta":0.207},"ci95":[0.174,0.239],"mechanism":"unknown","source_ids":["handedness_sex_2008"],"grade":"A","rationale":"Across 144 studies, men had 1.23 times the odds of being left-handed compared with women."}],"ref_year":2020,"source_ids":["handedness_meta_2020"],"grade":"A","notes":["One worldwide rate. The source reports that the rate varies by region and is lower where left-hand use is discouraged; that variation is not modelled yet."]}
+{
+    "id": "body.left_handed",
+    "version": 1,
+    "label": "Left-handed",
+    "tier": 3,
+    "definition": "Prefers the left hand for writing and similar tasks.",
+    "value_type": "boolean",
+    "parents": [
+        "frame.sex"
+    ],
+    "baseline": {
+        "keys": [],
+        "backoff": [],
+        "dist_kind": "bernoulli",
+        "table": {
+            "": [
+                0.106
+            ]
+        }
+    },
+    "calibration_offset": -0.1083,
+    "modifiers": [
+        {
+            "id": "male",
+            "when": {
+                "trait": "frame.sex",
+                "op": "eq",
+                "value": "male"
+            },
+            "effect": {
+                "kind": "log_odds",
+                "beta": 0.207
+            },
+            "ci95": [
+                0.174,
+                0.239
+            ],
+            "mechanism": "unknown",
+            "source_ids": [
+                "handedness_sex_2008"
+            ],
+            "grade": "A",
+            "rationale": "Across 144 studies, men had 1.23 times the odds of being left-handed compared with women."
+        }
+    ],
+    "ref_year": 2020,
+    "source_ids": [
+        "handedness_meta_2020"
+    ],
+    "grade": "A",
+    "notes": [
+        "One worldwide rate. The source reports that the rate varies by region and is lower where left-hand use is discouraged; that variation is not modelled yet."
+    ]
+}

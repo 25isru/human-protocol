@@ -1,1 +1,21 @@
-{"id":"geo.region","label":"Region","tier":1,"definition":"UN M49 region of the country.","value_type":"derived","parents":["frame.country"],"derive":{"fn":"geo","field":"region"},"version":1,"modifiers":[],"source_ids":["un_wpp_2024"],"grade":"A","notes":[]}
+{
+    "id": "geo.region",
+    "label": "Region",
+    "tier": 1,
+    "definition": "UN M49 region of the country.",
+    "value_type": "derived",
+    "parents": [
+        "frame.country"
+    ],
+    "derive": {
+        "fn": "geo",
+        "field": "region"
+    },
+    "version": 1,
+    "modifiers": [],
+    "source_ids": [
+        "un_wpp_2024"
+    ],
+    "grade": "A",
+    "notes": []
+}
