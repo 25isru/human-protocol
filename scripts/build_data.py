@@ -88,7 +88,7 @@ def table(rows, digits=4):
     return {"|".join(k): [float(f"{v:.{digits}g}") for v in vals] for k, vals in sorted(rows.items())}
 
 def write(spec):
-    (OUT / "traits" / f"{spec['id']}.json").write_text(json.dumps(spec, separators=(",", ":")))
+    (OUT / "traits" / f"{spec['id']}.json").write_text(json.dumps(spec, indent=4, ensure_ascii=False))
     print(f"{spec['id']:28s} rows={len(spec.get('baseline', {}).get('table', {}))}")
 
 SEXES = ["male", "female"]
@@ -294,5 +294,5 @@ write({"id": "identity.sexual_orientation", "version": 1, "label": "Sexual orien
                  "much higher rates among younger adults; those are not modelled yet.",
                  "This measures what people say about themselves. Where being open is unsafe, fewer people say it."]})
 
-(OUT / "geo.json").write_text(json.dumps(geo, separators=(",", ":"), ensure_ascii=False))
+(OUT / "geo.json").write_text(json.dumps(geo, indent=4, ensure_ascii=False))
 print("countries:", len(geo))

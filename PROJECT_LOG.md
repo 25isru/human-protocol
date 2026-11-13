@@ -22,6 +22,7 @@ everything shown to users must be in plain language with sources.
 
 - TypeScript everywhere; engine runs in the browser; trait data is JSON in this repo; static hosting.
 - Conditional tables are stored as compact keyed rows (`"country|sex|cohort": [numbers]`), not one object per stratum as in the protocol document. Same meaning, far smaller files.
+- Trait files and `geo.json` are written pretty-printed with 4-space indents (the owner's preference, for easier inspection). Keep that format.
 - Geographic fallback rows (`S:<subregion>`, `R:<region>`, `W`) are precomputed in `build_data.py`.
 - Country, sex and age are factored as country → sex | country → age | country, sex, so they use the ordinary engine.
 - No ancestry or genotype links into personality, cognition, values or social position (confirmed by the owner).

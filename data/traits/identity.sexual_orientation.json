@@ -1,1 +1,75 @@
-{"id":"identity.sexual_orientation","version":1,"label":"Sexual orientation","tier":6,"definition":"How the person describes their own sexual orientation in an anonymous survey.","value_type":"categorical","categories":["straight","gay_lesbian","bisexual","pansexual","asexual"],"tags":["sensitive"],"category_labels":{"straight":"Straight (or did not say otherwise)","gay_lesbian":"Gay or lesbian","bisexual":"Bisexual","pansexual":"Pansexual","asexual":"Asexual"},"phrases":{"straight":"is straight","gay_lesbian":"is {gay_word}","bisexual":"is bisexual","pansexual":"is pansexual","asexual":"is asexual"},"applies_when":{"trait":"frame.age","op":"gte","value":18},"parents":["frame.sex"],"baseline":{"keys":["frame.sex"],"backoff":[],"dist_kind":"categorical","table":{"male":[0.9,0.04,0.04,0.01,0.01],"female":[0.93,0.01,0.04,0.01,0.01]}},"modifiers":[],"ref_year":2023,"source_ids":["ipsos_pride_2023"],"grade":"C","low_confidence":true,"notes":["Based on averages across 30 countries in an online survey: 3% gay or lesbian (4% of men, 1% of women), 4% bisexual, 1% pansexual and 1% asexual. Everyone else, including people who preferred not to say, is counted as straight.","The same rates are used for every country and age. The survey found large differences between countries and much higher rates among younger adults; those are not modelled yet.","This measures what people say about themselves. Where being open is unsafe, fewer people say it."]}
+{
+    "id": "identity.sexual_orientation",
+    "version": 1,
+    "label": "Sexual orientation",
+    "tier": 6,
+    "definition": "How the person describes their own sexual orientation in an anonymous survey.",
+    "value_type": "categorical",
+    "categories": [
+        "straight",
+        "gay_lesbian",
+        "bisexual",
+        "pansexual",
+        "asexual"
+    ],
+    "tags": [
+        "sensitive"
+    ],
+    "category_labels": {
+        "straight": "Straight (or did not say otherwise)",
+        "gay_lesbian": "Gay or lesbian",
+        "bisexual": "Bisexual",
+        "pansexual": "Pansexual",
+        "asexual": "Asexual"
+    },
+    "phrases": {
+        "straight": "is straight",
+        "gay_lesbian": "is {gay_word}",
+        "bisexual": "is bisexual",
+        "pansexual": "is pansexual",
+        "asexual": "is asexual"
+    },
+    "applies_when": {
+        "trait": "frame.age",
+        "op": "gte",
+        "value": 18
+    },
+    "parents": [
+        "frame.sex"
+    ],
+    "baseline": {
+        "keys": [
+            "frame.sex"
+        ],
+        "backoff": [],
+        "dist_kind": "categorical",
+        "table": {
+            "male": [
+                0.9,
+                0.04,
+                0.04,
+                0.01,
+                0.01
+            ],
+            "female": [
+                0.93,
+                0.01,
+                0.04,
+                0.01,
+                0.01
+            ]
+        }
+    },
+    "modifiers": [],
+    "ref_year": 2023,
+    "source_ids": [
+        "ipsos_pride_2023"
+    ],
+    "grade": "C",
+    "low_confidence": true,
+    "notes": [
+        "Based on averages across 30 countries in an online survey: 3% gay or lesbian (4% of men, 1% of women), 4% bisexual, 1% pansexual and 1% asexual. Everyone else, including people who preferred not to say, is counted as straight.",
+        "The same rates are used for every country and age. The survey found large differences between countries and much higher rates among younger adults; those are not modelled yet.",
+        "This measures what people say about themselves. Where being open is unsafe, fewer people say it."
+    ]
+}

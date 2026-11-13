@@ -12,6 +12,6 @@ for (const spec of reg.traits.values()) {
   const file = join(process.cwd(), "data", "traits", `${spec.id}.json`);
   const json = JSON.parse(readFileSync(file, "utf8"));
   json.calibration_offset = offset;
-  writeFileSync(file, JSON.stringify(json));
+  writeFileSync(file, JSON.stringify(json, null, 4));
   console.log(`${spec.id}: target ${(target * 100).toFixed(2)}%, uncalibrated ${(before * 100).toFixed(2)}%, offset ${offset}`);
 }
