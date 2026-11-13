@@ -36,9 +36,25 @@ function headline(p: Profile): { title: string; sub: string; emoji: string } {
   const ageText = age === 0 ? "A baby" : age >= 100 ? "A centenarian" : `A${[8, 11, 18].includes(age) || (age >= 80 && age < 90) ? "n" : ""} ${age}-year-old`;
   const code = String(v("frame.country"));
   const title = age === 0 ? `A baby ${male ? "boy" : "girl"} in ${withArticle(placeName(code, registry))}` : `${ageText} ${noun} in ${withArticle(placeName(code, registry))}`;
-  const setting = v("origin.setting") === "urban" ? "lives in a town or city" : v("origin.setting") === "rural" ? "lives in the countryside" : "";
-  const sub = [`Born ${v("frame.birth_year")}`, String(v("geo.subregion") ?? ""), setting].filter(Boolean).join(" · ");
+  const sub = [`Born ${v("frame.birth_year")}`, String(v("geo.subregion") ?? "")].filter(Boolean).join(" · ");
   return { title, sub, emoji: flag(registry.geo[code]?.iso2) };
+}
+
+/** One sentence covering every rolled trait that has a summary phrase. */
+function narrative(p: Profile): string {
+  const male = p.traits["frame.sex"]?.value === "male";
+  const parts: string[] = [];
+  for (const id of registry.order) {
+    const spec = registry.traits.get(id)!;
+    const t = p.traits[id];
+    if (!spec.phrases || !t.trace.applicable || t.value === null) continue;
+    const template = spec.phrases[String(t.value)] ?? spec.phrases["*"];
+    if (!template) continue;
+    parts.push(template.replace("{value}", typeof t.value === "number" ? t.value.toFixed(spec.value_type === "continuous" ? 1 : 0) : String(t.value)).replace("{gay_word}", male ? "gay" : "a lesbian"));
+  }
+  if (!parts.length) return "";
+  const list = parts.length > 1 ? `${parts.slice(0, -1).join(", ")} and ${parts[parts.length - 1]}` : parts[0];
+  return `${male ? "He" : "She"} ${list}.`;
 }
 
 function withArticle(name: string): string {
@@ -62,41 +78,31 @@ function Bars({ t, spec }: { t: RolledTrait; spec: TraitSpec }) {
   );
 }
 
-function TraitRow({ spec, t, profile }: { spec: TraitSpec; t: RolledTrait; profile: Profile }) {
-  const [open, setOpen] = useState(false);
+function TraitDetail({ spec, t, profile }: { spec: TraitSpec; t: RolledTrait; profile: Profile }) {
   const lines = useMemo(() => explain(spec, t, registry, profile), [spec, t, profile]);
-  const muted = !t.trace.applicable || t.value === null;
   return (
-    <li className={`trait${open ? " is-open" : ""}`}>
-      <button className="trait-head" onClick={() => setOpen(!open)} aria-expanded={open}>
-        <span className="trait-label">{spec.label}</span>
-        <span className={`trait-value${muted ? " is-muted" : ""}`}>{formatValue(spec, t, registry)}</span>
-        <span className="chev" aria-hidden="true">{open ? "−" : "+"}</span>
-      </button>
-      {open && (
-        <div className="trait-body">
-          {lines.map((l, i) => <p key={i}>{l}</p>)}
-          <Bars t={t} spec={spec} />
-          {!t.trace.derived && t.trace.applicable && (
-            <>
-              <p className="meta">
-                <span className={`grade grade-${t.trace.grade}`}>{GRADE_LABEL[t.trace.grade]}</span>
-                {spec.ref_year && <span> · data for {spec.ref_year}</span>}
-                {spec.low_confidence && <span> · treat with caution</span>}
-              </p>
-              {spec.assumptions?.map((a, i) => <p key={i} className="note"><strong>Assumption:</strong> {a.what}. {a.why}</p>)}
-              {spec.notes.map((n, i) => <p key={i} className="note">{n}</p>)}
-              <ul className="sources">
-                {t.trace.source_ids.map((id) => {
-                  const s = registry.sources[id];
-                  return <li key={id}><a href={s.url} target="_blank" rel="noreferrer">{s.title}</a> — {s.publisher}</li>;
-                })}
-              </ul>
-            </>
-          )}
-        </div>
+    <div className="detail">
+      <h3>{spec.label}: {formatValue(spec, t, registry)}</h3>
+      {lines.map((l, i) => <p key={i}>{l}</p>)}
+      <Bars t={t} spec={spec} />
+      {!t.trace.derived && t.trace.applicable && (
+        <>
+          <p className="meta">
+            <span className={`grade grade-${t.trace.grade}`}>{GRADE_LABEL[t.trace.grade]}</span>
+            {spec.ref_year && <span> · data for {spec.ref_year}</span>}
+            {spec.low_confidence && <span> · treat with caution</span>}
+          </p>
+          {spec.assumptions?.map((a, i) => <p key={i} className="note"><strong>Assumption:</strong> {a.what}. {a.why}</p>)}
+          {spec.notes.map((n, i) => <p key={i} className="note">{n}</p>)}
+          <ul className="sources">
+            {t.trace.source_ids.map((id) => {
+              const s = registry.sources[id];
+              return <li key={id}><a href={s.url} target="_blank" rel="noreferrer">{s.title}</a> — {s.publisher}</li>;
+            })}
+          </ul>
+        </>
       )}
-    </li>
+    </div>
   );
 }
 
@@ -127,7 +133,13 @@ export function App() {
   }, [reroll, view]);
 
   const countries = useMemo(() => Object.entries(registry.geo).sort((a, b) => a[1].name.localeCompare(b[1].name)), []);
-  const visible = registry.order.map((id) => registry.traits.get(id)!).filter((s) => !s.hidden);
+  // Personal traits first, then the basics that the headline already states.
+  const visible = useMemo(() => {
+    const all = registry.order.map((id) => registry.traits.get(id)!).filter((s) => !s.hidden);
+    const basic = (s: TraitSpec) => s.id.startsWith("frame.") || s.id.startsWith("geo.");
+    return [...all.filter((s) => !basic(s)), ...all.filter(basic)];
+  }, []);
+  const [openId, setOpenId] = useState<string | null>(null);
   const profile = result.profile;
   const head = profile ? headline(profile) : null;
   const pinned = Boolean(pins.country || pins.sex || pins.age);
@@ -177,17 +189,30 @@ export function App() {
       {result.error && <p className="error">{result.error}</p>}
 
       {profile && head && (
-        <article className="card" key={profile.seed}>
+        <article className="card">
           <div className="card-head">
             <span className="flag" aria-hidden="true">{head.emoji}</span>
             <div>
               <h2>{head.title}</h2>
               <p>{head.sub}</p>
+              <p className="story">{narrative(profile)}</p>
             </div>
           </div>
-          <ul className="traits">
-            {visible.map((spec) => <TraitRow key={spec.id} spec={spec} t={profile.traits[spec.id]} profile={profile} />)}
-          </ul>
+          <div className="tiles">
+            {visible.map((spec) => {
+              const t = profile.traits[spec.id];
+              const muted = !t.trace.applicable || t.value === null;
+              return (
+                <button key={spec.id} className={`tile${openId === spec.id ? " is-open" : ""}`} onClick={() => setOpenId(openId === spec.id ? null : spec.id)} aria-expanded={openId === spec.id}>
+                  <span className="tile-label">{spec.label}</span>
+                  <span className={`tile-value${muted ? " is-muted" : ""}`}>{muted ? "—" : formatValue(spec, t, registry)}</span>
+                </button>
+              );
+            })}
+          </div>
+          {openId && profile.traits[openId]
+            ? <TraitDetail spec={registry.traits.get(openId)!} t={profile.traits[openId]} profile={profile} />
+            : <p className="hint">Select any detail to see the figures behind it and where they come from.</p>}
           <footer className="card-foot">
             <span>Seed <code>{profile.seed}</code></span>
             <button className="link" onClick={copyLink}>{copied ? "Copied" : "Copy link to this person"}</button>
@@ -198,7 +223,7 @@ export function App() {
       </>)}
 
       <footer className="about">
-        <p>Each value is rolled from figures for people like this one: the same country, sex and age where the data allows. Open any row to see the numbers and where they come from.</p>
+        <p>Each value is rolled from figures for people like this one: the same country, sex and age where the data allows. Select any detail to see the numbers and where they come from.</p>
         <p>This person is fictional. {visible.length} traits so far, version {registry.version}.</p>
       </footer>
     </main>

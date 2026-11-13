@@ -32,11 +32,11 @@ export function formatValue(spec: TraitSpec, t: RolledTrait, reg: Registry): str
   if (!t.trace.applicable) return "Not applicable";
   if (v === null) return "No data";
   if (spec.id === "frame.country") return placeName(String(v), reg);
-  if (spec.id === "body.height_cm") return `${(v as number).toFixed(1)} cm (${feetInches(v as number)})`;
+  if (spec.id === "body.height_cm") return `${(v as number).toFixed(1)} cm · ${feetInches(v as number)}`;
   if (typeof v === "boolean") return v ? "Yes" : "No";
   if (spec.id === "frame.sex") return v === "male" ? "Male" : "Female";
   if (spec.id === "origin.setting") return v === "urban" ? "A town or city" : "The countryside";
-  if (spec.category_labels?.[String(v)]) return spec.category_labels[String(v)];
+  if (spec.category_labels?.[String(v)]) return spec.category_labels[String(v)].replace(/ \(.*\)$/, "");
   if (spec.unit && typeof v === "number") return `${v} ${spec.unit}`;
   return String(v);
 }
@@ -51,17 +51,17 @@ export function groupLabel(s: Record<string, string>, reg: Registry, sexHint?: s
   return who;
 }
 
-function group(t: RolledTrait, reg: Registry, profile: Profile): string {
-  return groupLabel(t.trace.stratum, reg, t.trace.modifiers.length ? String(profile.traits["frame.sex"].value) : undefined);
+function group(spec: TraitSpec, t: RolledTrait, reg: Registry, profile: Profile): string {
+  return groupLabel(t.trace.stratum, reg, spec.parents.includes("frame.sex") ? String(profile.traits["frame.sex"].value) : undefined);
 }
 
 export function explain(spec: TraitSpec, t: RolledTrait, reg: Registry, profile: Profile): string[] {
   const lines: string[] = [];
   const { trace } = t;
-  if (!trace.applicable) return [`This trait is only rolled for people it applies to (${describeCondition(spec)}).`];
+  if (!trace.applicable) return [`This is only rolled for people it applies to (${describeCondition(spec)}).`];
   if (trace.derived) return [spec.definition];
   if (trace.missing_data || !trace.dist) return ["No data was available for this person, even after falling back to regional figures."];
-  const who = group(t, reg, profile);
+  const who = group(spec, t, reg, profile);
   const d = trace.dist;
   if (trace.pinned) lines.push("You fixed this value, so it was not rolled.");
 

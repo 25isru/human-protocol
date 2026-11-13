@@ -49,5 +49,6 @@ The same seed always produces the same person. Adding a new trait never changes 
 | Education (15+) | country, sex, age group | Wittgenstein Centre v3 | A |
 | Left-handed | sex | Papadatou-Pastou et al. 2020 and 2008 | A |
 | Smokes daily (15+) | country, sex | IHME 2012 | B, dated |
+| Sexual orientation (18+) | sex | Ipsos 2023, 30-country averages | C, rough |
 
 See `PROJECT_LOG.md` for decisions, known gaps and the roadmap.

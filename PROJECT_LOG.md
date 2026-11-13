@@ -27,6 +27,17 @@ everything shown to users must be in plain language with sources.
 - No ancestry or genotype links into personality, cognition, values or social position (confirmed by the owner).
 - Only data that could be traced to a citable source was included. Fewer traits, properly sourced, over many loose ones.
 
+## Session 2026-11-13 (third)
+
+- Profile card reworked: a one-sentence summary of every trait under the headline, and a compact grid of tiles instead of a long list. Summary wording lives in each trait file (`phrases`).
+- Added `identity.sexual_orientation` (tagged sensitive, grade C). Uses only the 30-country averages stated in the text of the Ipsos 2023 report. Per-country and per-generation figures are in the report's charts, which could not be read reliably from here.
+- Religion, smoking by age, and newer height cohorts are blocked on data files the owner has been asked to upload:
+  1. Pew "Dataset of Global Religious Composition Estimates for 2010 and 2020" (free Pew account).
+  2. IHME "GBD 2019 Smoking Tobacco Use Prevalence 1990-2019", the Data CSV (free GHDx account).
+  3. Ipsos "LGBT+ Pride 2023 Global Survey Report" PDF (to read the per-country chart).
+  4. NCD-RisC height data for ages 5 to 19 by country (ncdrisc.org downloads), which extends height to people born up to about 2000.
+- No dataset of height spread by country was found. The assumption stays until one is.
+
 ## Known gaps and honest caveats
 
 - **Height spread is assumed** (SD 7.0 cm men, 6.5 cm women). The source gives means only. Find a sourced SD by country.

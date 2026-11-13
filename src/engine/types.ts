@@ -64,6 +64,9 @@ export interface TraitSpec {
   hidden?: boolean; // internal helper trait, not shown on the profile
   categories?: string[];
   category_labels?: Record<string, string>;
+  /** Verb phrases for the one-line summary, keyed by value; "*" is a template using {value}. */
+  phrases?: Record<string, string>;
+  tags?: string[];
   support?: { min: number; max: number };
   applies_when?: Predicate;
   parents: TraitId[];

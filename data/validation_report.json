@@ -1,5 +1,5 @@
 {
- "registry_version": "43d561a0",
+ "registry_version": "30784ff8",
  "people": 300000,
  "traits": [
   {
@@ -902,11 +902,69 @@
      "detail": "no adjustments"
     }
    ]
+  },
+  {
+   "id": "identity.sexual_orientation",
+   "label": "Sexual orientation",
+   "examples": [
+    {
+     "stratum": {
+      "frame.sex": "female"
+     },
+     "what": "straight",
+     "expected": 93,
+     "simulated": 93.06,
+     "unit": "%",
+     "n": 107536
+    },
+    {
+     "stratum": {
+      "frame.sex": "male"
+     },
+     "what": "straight",
+     "expected": 90,
+     "simulated": 89.9,
+     "unit": "%",
+     "n": 106297
+    }
+   ],
+   "gates": [
+    {
+     "id": "schema",
+     "name": "Well-formed data",
+     "status": "pass",
+     "detail": "2 rows checked"
+    },
+    {
+     "id": "citation",
+     "name": "Every figure has a source",
+     "status": "pass",
+     "detail": "1 source"
+    },
+    {
+     "id": "effects",
+     "name": "Adjustments within plausible bounds",
+     "status": "skip",
+     "detail": "no adjustments"
+    },
+    {
+     "id": "marginal",
+     "name": "Simulated population matches the source",
+     "status": "pass",
+     "detail": "2 groups checked, all within the allowed margin; the largest group is off by 0.06 percentage points"
+    },
+    {
+     "id": "conditional",
+     "name": "Adjustments reproduce their sourced effect",
+     "status": "skip",
+     "detail": "no adjustments"
+    }
+   ]
   }
  ],
  "summary": {
-  "traits": 13,
-  "passed": 13,
+  "traits": 14,
+  "passed": 14,
   "failed": 0
  }
 }

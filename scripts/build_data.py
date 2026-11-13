@@ -159,6 +159,7 @@ rows = aggregate(rows, lambda c: tot[c])
 write({"id": "origin.setting", "version": 1, "label": "Lives in", "tier": 1,
        "definition": "Urban or rural residence, using each country's own definition of urban.",
        "value_type": "categorical", "categories": ["urban", "rural"], "parents": ["frame.country"],
+       "phrases": {"urban": "lives in a town or city", "rural": "lives in the countryside"},
        "baseline": {"keys": ["frame.country"], "backoff": [{"key": "frame.country", "via": "geo_hierarchy"}],
                     "dist_kind": "categorical", "table": table(rows)},
        "modifiers": [], "ref_year": AS_OF, "source_ids": ["un_wup_2018"], "grade": "A",
@@ -184,6 +185,7 @@ cohorts = sorted({k[2] for k in rows}, key=int)
 write({"id": "body.height_cm", "version": 1, "label": "Height", "tier": 3, "unit": "cm",
        "definition": "Standing adult height.",
        "value_type": "continuous", "support": {"min": 120, "max": 215},
+       "phrases": {"*": "is {value} cm tall"},
        "applies_when": {"trait": "frame.age", "op": "gte", "value": 18},
        "parents": ["frame.country", "frame.sex", "frame.birth_cohort"],
        "baseline": {"keys": ["frame.country", "frame.sex", "frame.birth_cohort"],
@@ -215,6 +217,9 @@ rows = {k: [x / sum(v) for x in v] for k, v in rows.items() if sum(v) > 0}
 write({"id": "social.education", "version": 1, "label": "Education", "tier": 4,
        "definition": "Highest level of education completed so far.",
        "value_type": "ordinal", "categories": EDU,
+       "phrases": {"No Education": "has no formal education", "Incomplete Primary": "left school during primary",
+                   "Primary": "finished primary school", "Lower Secondary": "finished lower secondary school",
+                   "Upper Secondary": "finished upper secondary school", "Post Secondary": "has a post-secondary or university education"},
        "category_labels": {"No Education": "No formal education", "Incomplete Primary": "Some primary school",
                            "Primary": "Primary school", "Lower Secondary": "Lower secondary school",
                            "Upper Secondary": "Upper secondary school", "Post Secondary": "Post-secondary or university"},
@@ -244,6 +249,7 @@ rows = aggregate(rows, lambda c, sx: sexpop(c, sx, 15))
 write({"id": "health.smoker_daily", "version": 1, "label": "Smokes daily", "tier": 5,
        "definition": "Smokes tobacco every day.",
        "value_type": "boolean", "applies_when": {"trait": "frame.age", "op": "gte", "value": 15},
+       "phrases": {"true": "smokes daily", "false": "doesn't smoke daily"},
        "parents": ["frame.country", "frame.sex"],
        "baseline": {"keys": ["frame.country", "frame.sex"],
                     "backoff": [{"key": "frame.country", "via": "geo_hierarchy"}],
@@ -256,6 +262,7 @@ write({"id": "health.smoker_daily", "version": 1, "label": "Smokes daily", "tier
 write({"id": "body.left_handed", "version": 1, "label": "Left-handed", "tier": 3,
        "definition": "Prefers the left hand for writing and similar tasks.",
        "value_type": "boolean", "parents": ["frame.sex"],
+       "phrases": {"true": "is left-handed", "false": "is right-handed"},
        "baseline": {"keys": [], "backoff": [], "dist_kind": "bernoulli", "table": {"": [0.106]}},
        "calibration_offset": 0,
        "modifiers": [{"id": "male", "when": {"trait": "frame.sex", "op": "eq", "value": "male"},
@@ -266,6 +273,26 @@ write({"id": "body.left_handed", "version": 1, "label": "Left-handed", "tier": 3
        "ref_year": 2020, "source_ids": ["handedness_meta_2020"], "grade": "A",
        "notes": ["One worldwide rate. The source reports that the rate varies by region and is lower where "
                  "left-hand use is discouraged; that variation is not modelled yet."]})
+
+# identity.sexual_orientation | sex   (Ipsos 2023, 30-country averages as stated in the report text)
+ORI = ["straight", "gay_lesbian", "bisexual", "pansexual", "asexual"]
+write({"id": "identity.sexual_orientation", "version": 1, "label": "Sexual orientation", "tier": 6,
+       "definition": "How the person describes their own sexual orientation in an anonymous survey.",
+       "value_type": "categorical", "categories": ORI, "tags": ["sensitive"],
+       "category_labels": {"straight": "Straight (or did not say otherwise)", "gay_lesbian": "Gay or lesbian",
+                           "bisexual": "Bisexual", "pansexual": "Pansexual", "asexual": "Asexual"},
+       "phrases": {"straight": "is straight", "gay_lesbian": "is {gay_word}", "bisexual": "is bisexual",
+                   "pansexual": "is pansexual", "asexual": "is asexual"},
+       "applies_when": {"trait": "frame.age", "op": "gte", "value": 18},
+       "parents": ["frame.sex"],
+       "baseline": {"keys": ["frame.sex"], "backoff": [], "dist_kind": "categorical",
+                    "table": {"male": [0.90, 0.04, 0.04, 0.01, 0.01], "female": [0.93, 0.01, 0.04, 0.01, 0.01]}},
+       "modifiers": [], "ref_year": 2023, "source_ids": ["ipsos_pride_2023"], "grade": "C", "low_confidence": True,
+       "notes": ["Based on averages across 30 countries in an online survey: 3% gay or lesbian (4% of men, 1% of women), "
+                 "4% bisexual, 1% pansexual and 1% asexual. Everyone else, including people who preferred not to say, is counted as straight.",
+                 "The same rates are used for every country and age. The survey found large differences between countries and "
+                 "much higher rates among younger adults; those are not modelled yet.",
+                 "This measures what people say about themselves. Where being open is unsafe, fewer people say it."]})
 
 (OUT / "geo.json").write_text(json.dumps(geo, separators=(",", ":"), ensure_ascii=False))
 print("countries:", len(geo))
