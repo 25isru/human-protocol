@@ -1,6 +1,6 @@
 {
     "id": "identity.sexual_orientation",
-    "version": 1,
+    "version": 2,
     "label": "Sexual orientation",
     "tier": 6,
     "definition": "How the person describes their own sexual orientation in an anonymous survey.",
@@ -15,6 +15,7 @@
     "tags": [
         "sensitive"
     ],
+    "world_label": "the 30 surveyed countries",
     "category_labels": {
         "straight": "Straight (or did not say otherwise)",
         "gay_lesbian": "Gay or lesbian",
@@ -35,41 +36,631 @@
         "value": 18
     },
     "parents": [
-        "frame.sex"
+        "frame.country",
+        "frame.sex",
+        "frame.generation"
     ],
     "baseline": {
         "keys": [
-            "frame.sex"
+            "frame.country"
         ],
-        "backoff": [],
+        "backoff": [
+            {
+                "key": "frame.country",
+                "via": "geo_hierarchy"
+            }
+        ],
         "dist_kind": "categorical",
         "table": {
-            "male": [
+            "32": [
+                0.918,
+                0.02,
+                0.05,
+                0.002,
+                0.01
+            ],
+            "36": [
                 0.9,
                 0.04,
                 0.04,
                 0.01,
                 0.01
             ],
-            "female": [
+            "56": [
+                0.91,
+                0.03,
+                0.04,
+                0.01,
+                0.01
+            ],
+            "76": [
+                0.86,
+                0.05,
+                0.07,
+                0.01,
+                0.01
+            ],
+            "124": [
+                0.9,
+                0.04,
+                0.04,
+                0.01,
+                0.01
+            ],
+            "152": [
+                0.918,
+                0.03,
+                0.04,
+                0.01,
+                0.002
+            ],
+            "170": [
+                0.89,
+                0.04,
+                0.05,
+                0.01,
+                0.01
+            ],
+            "250": [
+                0.91,
+                0.04,
+                0.03,
+                0.01,
+                0.01
+            ],
+            "276": [
+                0.91,
+                0.03,
+                0.04,
+                0.01,
+                0.01
+            ],
+            "348": [
+                0.938,
+                0.02,
+                0.03,
+                0.01,
+                0.002
+            ],
+            "372": [
+                0.95,
+                0.01,
+                0.02,
+                0.01,
+                0.01
+            ],
+            "380": [
+                0.93,
+                0.02,
+                0.03,
+                0.01,
+                0.01
+            ],
+            "392": [
+                0.96,
+                0.005,
+                0.01,
+                0.005,
+                0.02
+            ],
+            "410": [
+                0.94,
+                0.01,
+                0.03,
+                0.01,
+                0.01
+            ],
+            "484": [
+                0.918,
+                0.02,
+                0.05,
+                0.002,
+                0.01
+            ],
+            "528": [
+                0.88,
+                0.03,
+                0.07,
+                0.01,
+                0.01
+            ],
+            "554": [
+                0.9,
+                0.04,
+                0.04,
+                0.01,
+                0.01
+            ],
+            "604": [
+                0.96,
+                0.01,
+                0.02,
+                0.005,
+                0.005
+            ],
+            "616": [
+                0.94,
+                0.02,
+                0.02,
+                0.01,
+                0.01
+            ],
+            "620": [
+                0.93,
+                0.02,
+                0.03,
+                0.01,
+                0.01
+            ],
+            "642": [
                 0.93,
                 0.01,
                 0.04,
                 0.01,
                 0.01
+            ],
+            "702": [
+                0.93,
+                0.02,
+                0.03,
+                0.01,
+                0.01
+            ],
+            "710": [
+                0.928,
+                0.03,
+                0.03,
+                0.01,
+                0.002
+            ],
+            "724": [
+                0.87,
+                0.06,
+                0.05,
+                0.01,
+                0.01
+            ],
+            "752": [
+                0.93,
+                0.01,
+                0.04,
+                0.01,
+                0.01
+            ],
+            "756": [
+                0.9,
+                0.04,
+                0.02,
+                0.02,
+                0.02
+            ],
+            "764": [
+                0.91,
+                0.04,
+                0.03,
+                0.01,
+                0.01
+            ],
+            "792": [
+                0.92,
+                0.01,
+                0.05,
+                0.01,
+                0.01
+            ],
+            "826": [
+                0.9,
+                0.04,
+                0.04,
+                0.01,
+                0.01
+            ],
+            "840": [
+                0.908,
+                0.03,
+                0.05,
+                0.01,
+                0.002
+            ],
+            "W": [
+                0.91,
+                0.03,
+                0.04,
+                0.01,
+                0.01
+            ]
+        },
+        "calibration": {
+            "32": [
+                0,
+                0.1326,
+                -0.0555,
+                -0.0555,
+                -0.0555
+            ],
+            "36": [
+                0,
+                0.2485,
+                0.0303,
+                0.0303,
+                0.0303
+            ],
+            "56": [
+                0,
+                0.306,
+                0.0869,
+                0.0869,
+                0.0869
+            ],
+            "76": [
+                0,
+                0.1826,
+                -0.0481,
+                -0.0481,
+                -0.0481
+            ],
+            "124": [
+                0,
+                0.2522,
+                0.0547,
+                0.0547,
+                0.0547
+            ],
+            "152": [
+                0,
+                0.1963,
+                -0.0047,
+                -0.0047,
+                -0.0047
+            ],
+            "170": [
+                0,
+                0.1493,
+                -0.0574,
+                -0.0574,
+                -0.0574
+            ],
+            "250": [
+                0,
+                0.2782,
+                0.0606,
+                0.0606,
+                0.0606
+            ],
+            "276": [
+                0,
+                0.3225,
+                0.124,
+                0.124,
+                0.124
+            ],
+            "348": [
+                0,
+                0.3017,
+                0.101,
+                0.101,
+                0.101
+            ],
+            "372": [
+                0,
+                0.1962,
+                0.0061,
+                0.0061,
+                0.0061
+            ],
+            "380": [
+                0,
+                0.3478,
+                0.1513,
+                0.1513,
+                0.1513
+            ],
+            "392": [
+                0,
+                0.3498,
+                0.1701,
+                0.1701,
+                0.1701
+            ],
+            "410": [
+                0,
+                0.2767,
+                0.0994,
+                0.0994,
+                0.0994
+            ],
+            "484": [
+                0,
+                0.0856,
+                -0.1233,
+                -0.1233,
+                -0.1233
+            ],
+            "528": [
+                0,
+                0.2486,
+                0.0655,
+                0.0655,
+                0.0655
+            ],
+            "554": [
+                0,
+                0.2086,
+                0.0261,
+                0.0261,
+                0.0261
+            ],
+            "604": [
+                0,
+                0.067,
+                -0.119,
+                -0.119,
+                -0.119
+            ],
+            "616": [
+                0,
+                0.3007,
+                0.0953,
+                0.0953,
+                0.0953
+            ],
+            "620": [
+                0,
+                0.3306,
+                0.1248,
+                0.1248,
+                0.1248
+            ],
+            "642": [
+                0,
+                0.2664,
+                0.0984,
+                0.0984,
+                0.0984
+            ],
+            "702": [
+                0,
+                0.0933,
+                -0.0652,
+                -0.0652,
+                -0.0652
+            ],
+            "710": [
+                0,
+                0.0606,
+                -0.1606,
+                -0.1606,
+                -0.1606
+            ],
+            "724": [
+                0,
+                0.3137,
+                0.1219,
+                0.1219,
+                0.1219
+            ],
+            "752": [
+                0,
+                0.2405,
+                0.0683,
+                0.0683,
+                0.0683
+            ],
+            "756": [
+                0,
+                0.2937,
+                0.1006,
+                0.1006,
+                0.1006
+            ],
+            "764": [
+                0,
+                0.2412,
+                0.044,
+                0.044,
+                0.044
+            ],
+            "792": [
+                0,
+                0.1268,
+                -0.0602,
+                -0.0602,
+                -0.0602
+            ],
+            "826": [
+                0,
+                0.2931,
+                0.074,
+                0.074,
+                0.074
+            ],
+            "840": [
+                0,
+                0.224,
+                0.04,
+                0.04,
+                0.04
+            ],
+            "W": [
+                0,
+                0.078,
+                -0.1074,
+                -0.1074,
+                -0.1074
             ]
         }
     },
-    "modifiers": [],
+    "modifiers": [
+        {
+            "id": "male",
+            "when": {
+                "trait": "frame.sex",
+                "op": "eq",
+                "value": "male"
+            },
+            "effect": {
+                "kind": "category_shift",
+                "betas": {
+                    "gay_lesbian": 0.2877
+                }
+            },
+            "no_ci_reason": "The survey report publishes whole percentages without confidence intervals.",
+            "mechanism": "unknown",
+            "source_ids": [
+                "ipsos_pride_2023"
+            ],
+            "grade": "C",
+            "rationale": "4% of men identified as gay, against 3% of all adults; other answers did not differ by sex."
+        },
+        {
+            "id": "female",
+            "when": {
+                "trait": "frame.sex",
+                "op": "eq",
+                "value": "female"
+            },
+            "effect": {
+                "kind": "category_shift",
+                "betas": {
+                    "gay_lesbian": -1.0986
+                }
+            },
+            "no_ci_reason": "The survey report publishes whole percentages without confidence intervals.",
+            "mechanism": "unknown",
+            "source_ids": [
+                "ipsos_pride_2023"
+            ],
+            "grade": "C",
+            "rationale": "1% of women identified as lesbian or gay, against 3% of all adults; other answers did not differ by sex."
+        },
+        {
+            "id": "gen_z",
+            "when": {
+                "trait": "frame.generation",
+                "op": "eq",
+                "value": "gen_z"
+            },
+            "effect": {
+                "kind": "category_shift",
+                "betas": {
+                    "gay_lesbian": 0.6931,
+                    "bisexual": 0.6931,
+                    "pansexual": 0.6931,
+                    "asexual": 0.6931
+                }
+            },
+            "no_ci_reason": "The survey report publishes whole percentages without confidence intervals.",
+            "overlap_group": "generation",
+            "mechanism": "social",
+            "source_ids": [
+                "ipsos_pride_2023"
+            ],
+            "grade": "C",
+            "rationale": "Across the 30 countries, 16% of this generation identified as gay, lesbian, bisexual, pansexual or asexual, against 8% of all adults."
+        },
+        {
+            "id": "millennial",
+            "when": {
+                "trait": "frame.generation",
+                "op": "eq",
+                "value": "millennial"
+            },
+            "effect": {
+                "kind": "category_shift",
+                "betas": {
+                    "gay_lesbian": 0.1178,
+                    "bisexual": 0.1178,
+                    "pansexual": 0.1178,
+                    "asexual": 0.1178
+                }
+            },
+            "no_ci_reason": "The survey report publishes whole percentages without confidence intervals.",
+            "overlap_group": "generation",
+            "mechanism": "social",
+            "source_ids": [
+                "ipsos_pride_2023"
+            ],
+            "grade": "C",
+            "rationale": "Across the 30 countries, 9% of this generation identified as gay, lesbian, bisexual, pansexual or asexual, against 8% of all adults."
+        },
+        {
+            "id": "gen_x",
+            "when": {
+                "trait": "frame.generation",
+                "op": "eq",
+                "value": "gen_x"
+            },
+            "effect": {
+                "kind": "category_shift",
+                "betas": {
+                    "gay_lesbian": -0.47,
+                    "bisexual": -0.47,
+                    "pansexual": -0.47,
+                    "asexual": -0.47
+                }
+            },
+            "no_ci_reason": "The survey report publishes whole percentages without confidence intervals.",
+            "overlap_group": "generation",
+            "mechanism": "social",
+            "source_ids": [
+                "ipsos_pride_2023"
+            ],
+            "grade": "C",
+            "rationale": "Across the 30 countries, 5% of this generation identified as gay, lesbian, bisexual, pansexual or asexual, against 8% of all adults."
+        },
+        {
+            "id": "boomer_or_older",
+            "when": {
+                "trait": "frame.generation",
+                "op": "eq",
+                "value": "boomer_or_older"
+            },
+            "effect": {
+                "kind": "category_shift",
+                "betas": {
+                    "gay_lesbian": -0.6931,
+                    "bisexual": -0.6931,
+                    "pansexual": -0.6931,
+                    "asexual": -0.6931
+                }
+            },
+            "no_ci_reason": "The survey report publishes whole percentages without confidence intervals.",
+            "overlap_group": "generation",
+            "mechanism": "social",
+            "source_ids": [
+                "ipsos_pride_2023"
+            ],
+            "grade": "C",
+            "rationale": "Across the 30 countries, 4% of this generation identified as gay, lesbian, bisexual, pansexual or asexual, against 8% of all adults."
+        }
+    ],
     "ref_year": 2023,
     "source_ids": [
         "ipsos_pride_2023"
     ],
     "grade": "C",
     "low_confidence": true,
+    "assumptions": [
+        {
+            "what": "Countries that were not surveyed use the 30-country average",
+            "why": "The survey covers 30 countries, mostly in Europe and the Americas. Nothing comparable exists for most of Africa, the Middle East and Asia.",
+            "grade": "D"
+        },
+        {
+            "what": "The differences by sex and by generation are the same in every country",
+            "why": "The report gives them only as 30-country averages.",
+            "grade": "D"
+        },
+        {
+            "what": "People aged 75 and over are treated like the oldest surveyed generation",
+            "why": "The survey interviewed adults under 75.",
+            "grade": "D"
+        }
+    ],
     "notes": [
-        "Based on averages across 30 countries in an online survey: 3% gay or lesbian (4% of men, 1% of women), 4% bisexual, 1% pansexual and 1% asexual. Everyone else, including people who preferred not to say, is counted as straight.",
-        "The same rates are used for every country and age. The survey found large differences between countries and much higher rates among younger adults; those are not modelled yet.",
-        "This measures what people say about themselves. Where being open is unsafe, fewer people say it."
+        "Online survey of 22,514 adults. Everyone who did not pick one of the four listed identities, including people who preferred not to say, is counted as straight.",
+        "In nine of the countries the online sample is more urban, educated or affluent than the general population.",
+        "This measures what people say about themselves. Where being open is unsafe, fewer people say it.",
+        "Figures are whole percentages, so small categories are imprecise."
     ]
 }

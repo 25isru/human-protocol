@@ -23,6 +23,8 @@ export interface ConditionalTable {
   backoff: BackoffStep[];
   dist_kind: "categorical" | "bernoulli" | "normal";
   table: Record<string, number[]>;
+  /** Per-row log offsets per category, solved by `npm run calibrate`, so adjustments keep each row's sourced shares. */
+  calibration?: Record<string, number[]>;
 }
 
 export type Dist =
@@ -35,9 +37,12 @@ export interface Modifier {
   when: Predicate;
   effect:
     | { kind: "log_odds"; category?: string; beta: number }
+    | { kind: "category_shift"; betas: Record<string, number> } // log multipliers for several categories at once
     | { kind: "mean_shift"; delta: number; scale: "unit" | "sd" }
     | { kind: "sd_scale"; factor: number };
   ci95?: [number, number];
+  /** Required when ci95 is absent: why the source gives no interval. */
+  no_ci_reason?: string;
   adjusted_for?: TraitId[];
   overlap_group?: string;
   mechanism: "genetic" | "environmental" | "social" | "measurement" | "unknown";
@@ -50,7 +55,8 @@ export type Derive =
   | { fn: "birth_year"; as_of: number }
   | { fn: "age_group5" }
   | { fn: "cohort5" }
-  | { fn: "geo"; field: "subregion" | "region" };
+  | { fn: "geo"; field: "subregion" | "region" }
+  | { fn: "bins"; from: TraitId; edges: number[]; labels: string[] }; // labels[i] covers values below edges[i]; the last label covers the rest
 
 export interface TraitSpec {
   id: TraitId;
@@ -67,6 +73,8 @@ export interface TraitSpec {
   /** Verb phrases for the one-line summary, keyed by value; "*" is a template using {value}. */
   phrases?: Record<string, string>;
   tags?: string[];
+  /** What the worldwide fallback row really is, when it is not a true world figure. */
+  world_label?: string;
   support?: { min: number; max: number };
   applies_when?: Predicate;
   parents: TraitId[];

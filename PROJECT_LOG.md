@@ -28,15 +28,19 @@ everything shown to users must be in plain language with sources.
 - No ancestry or genotype links into personality, cognition, values or social position (confirmed by the owner).
 - Only data that could be traced to a citable source was included. Fewer traits, properly sourced, over many loose ones.
 
-## Session 2026-11-13 (third)
+## Reminders for the owner (say these at the start of the next session)
+
+Two files are still needed. The owner asked to be reminded:
+
+1. **Smoking fix:** IHME "GBD 2019 Smoking Tobacco Use Prevalence 1990-2019", the Data CSV, from https://ghdx.healthdata.org/record/ihme-data/gbd-2019-smoking-tobacco-use-prevalence-1990-2019 (likely needs a free account). Fixes the 2012 date and the missing age differences.
+2. **Height for young adults:** NCD-RisC country-level height data for ages 5 to 19, from ncdrisc.org (data downloads, height). Extends height to people born up to about 2000.
+
+## Session 2026-11-13 (third and fourth)
 
 - Profile card reworked: a one-sentence summary of every trait under the headline, and a compact grid of tiles instead of a long list. Summary wording lives in each trait file (`phrases`).
-- Added `identity.sexual_orientation` (tagged sensitive, grade C). Uses only the 30-country averages stated in the text of the Ipsos 2023 report. Per-country and per-generation figures are in the report's charts, which could not be read reliably from here.
-- Religion, smoking by age, and newer height cohorts are blocked on data files the owner has been asked to upload:
-  1. Pew "Dataset of Global Religious Composition Estimates for 2010 and 2020" (free Pew account).
-  2. IHME "GBD 2019 Smoking Tobacco Use Prevalence 1990-2019", the Data CSV (free GHDx account).
-  3. Ipsos "LGBT+ Pride 2023 Global Survey Report" PDF (to read the per-country chart).
-  4. NCD-RisC height data for ages 5 to 19 by country (ncdrisc.org downloads), which extends height to people born up to about 2000.
+- Added `social.religion` from the Pew 2020 dataset (owner upload; 200 countries, grade A, tagged sensitive). The raw Pew files are not in the repository because they need a Pew account; `build_data.py` expects them unzipped under `<dir>/pew/`.
+- `identity.sexual_orientation` is now version 2: per-country figures for 30 countries from the Ipsos 2023 chart (owner uploaded the PDF; values read from the page and cross-checked against the chart objects in the PDF), with adjustments for sex and generation. Other countries use the 30-country average. Grade C, tagged sensitive, three assumptions listed on the card.
+- Engine additions to support that: `category_shift` adjustments (several categories at once), a `bins` derivation (used for `frame.generation`), per-row calibration offsets for categorical traits (`baseline.calibration`, solved by `npm run calibrate`), and `no_ci_reason` for adjustments whose source gives no confidence interval.
 - No dataset of height spread by country was found. The assumption stays until one is.
 
 ## Known gaps and honest caveats
@@ -48,7 +52,8 @@ everything shown to users must be in plain language with sources.
 - **Left-handedness** uses one worldwide rate; regional variation is documented in the source but not modelled.
 - 36 small territories have no education data and use subregion averages. Holy See is excluded (no age data).
 - Sex is binary because the population statistics are.
-- Calibration offsets and the adjustment-effect gate are only implemented for yes/no traits.
+- The adjustment-effect gate is only implemented for yes/no traits; categorical adjustments are covered by tests in `tests/population.test.ts` instead.
+- Sexual orientation outside the 30 surveyed countries is a placeholder (the survey average), and the sex and generation effects are assumed to be the same everywhere.
 - The gates check that the simulation reproduces its sources. They do not yet check a number against the text of its source document; that arrives with the research agent.
 
 ## Raw data

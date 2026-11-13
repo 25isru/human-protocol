@@ -1,5 +1,5 @@
 {
- "registry_version": "30784ff8",
+ "registry_version": "a15a68f8",
  "people": 300000,
  "traits": [
   {
@@ -327,6 +327,43 @@
   {
    "id": "frame.birth_cohort",
    "label": "Birth cohort",
+   "examples": [],
+   "gates": [
+    {
+     "id": "schema",
+     "name": "Well-formed data",
+     "status": "pass",
+     "detail": "derived trait"
+    },
+    {
+     "id": "citation",
+     "name": "Every figure has a source",
+     "status": "pass",
+     "detail": "0 sources"
+    },
+    {
+     "id": "effects",
+     "name": "Adjustments within plausible bounds",
+     "status": "skip",
+     "detail": "no adjustments"
+    },
+    {
+     "id": "marginal",
+     "name": "Simulated population matches the source",
+     "status": "skip",
+     "detail": "derived trait"
+    },
+    {
+     "id": "conditional",
+     "name": "Adjustments reproduce their sourced effect",
+     "status": "skip",
+     "detail": "no adjustments"
+    }
+   ]
+  },
+  {
+   "id": "frame.generation",
+   "label": "Generation",
    "examples": [],
    "gates": [
     {
@@ -800,6 +837,104 @@
    ]
   },
   {
+   "id": "social.religion",
+   "label": "Religion",
+   "examples": [
+    {
+     "stratum": {
+      "frame.country": "356"
+     },
+     "what": "Hindus",
+     "expected": 79.37,
+     "simulated": 79.29,
+     "unit": "%",
+     "n": 53067
+    },
+    {
+     "stratum": {
+      "frame.country": "156"
+     },
+     "what": "Religiously_unaffiliated",
+     "expected": 89.62,
+     "simulated": 89.93,
+     "unit": "%",
+     "n": 51076
+    },
+    {
+     "stratum": {
+      "frame.country": "840"
+     },
+     "what": "Christians",
+     "expected": 64.01,
+     "simulated": 63.92,
+     "unit": "%",
+     "n": 12310
+    },
+    {
+     "stratum": {
+      "frame.country": "360"
+     },
+     "what": "Muslims",
+     "expected": 86.96,
+     "simulated": 86.86,
+     "unit": "%",
+     "n": 10460
+    },
+    {
+     "stratum": {
+      "frame.country": "586"
+     },
+     "what": "Muslims",
+     "expected": 96.54,
+     "simulated": 96.56,
+     "unit": "%",
+     "n": 9392
+    },
+    {
+     "stratum": {
+      "frame.country": "566"
+     },
+     "what": "Muslims",
+     "expected": 56.07,
+     "simulated": 55.9,
+     "unit": "%",
+     "n": 8731
+    }
+   ],
+   "gates": [
+    {
+     "id": "schema",
+     "name": "Well-formed data",
+     "status": "pass",
+     "detail": "229 rows checked"
+    },
+    {
+     "id": "citation",
+     "name": "Every figure has a source",
+     "status": "pass",
+     "detail": "1 source"
+    },
+    {
+     "id": "effects",
+     "name": "Adjustments within plausible bounds",
+     "status": "skip",
+     "detail": "no adjustments"
+    },
+    {
+     "id": "marginal",
+     "name": "Simulated population matches the source",
+     "status": "pass",
+     "detail": "87 groups checked, all within the allowed margin; the largest group is off by 0.08 percentage points"
+    },
+    {
+     "id": "conditional",
+     "name": "Adjustments reproduce their sourced effect",
+     "status": "skip",
+     "detail": "no adjustments"
+    }
+   ]
+  },
+  {
    "id": "health.smoker_daily",
    "label": "Smokes daily",
    "examples": [
@@ -909,23 +1044,63 @@
    "examples": [
     {
      "stratum": {
-      "frame.sex": "female"
+      "frame.country": "840"
      },
      "what": "straight",
-     "expected": 93,
-     "simulated": 93.06,
+     "expected": 90.8,
+     "simulated": 91.01,
      "unit": "%",
-     "n": 107536
+     "n": 9730
     },
     {
      "stratum": {
-      "frame.sex": "male"
+      "frame.country": "76"
      },
      "what": "straight",
-     "expected": 90,
-     "simulated": 89.9,
+     "expected": 86,
+     "simulated": 86.77,
      "unit": "%",
-     "n": 106297
+     "n": 6000
+    },
+    {
+     "stratum": {
+      "frame.country": "392"
+     },
+     "what": "straight",
+     "expected": 96,
+     "simulated": 96.15,
+     "unit": "%",
+     "n": 3821
+    },
+    {
+     "stratum": {
+      "frame.country": "484"
+     },
+     "what": "straight",
+     "expected": 91.8,
+     "simulated": 92.39,
+     "unit": "%",
+     "n": 3457
+    },
+    {
+     "stratum": {
+      "frame.country": "276"
+     },
+     "what": "straight",
+     "expected": 91,
+     "simulated": 91.61,
+     "unit": "%",
+     "n": 2432
+    },
+    {
+     "stratum": {
+      "frame.country": "792"
+     },
+     "what": "straight",
+     "expected": 92,
+     "simulated": 92.42,
+     "unit": "%",
+     "n": 2415
     }
    ],
    "gates": [
@@ -933,7 +1108,7 @@
      "id": "schema",
      "name": "Well-formed data",
      "status": "pass",
-     "detail": "2 rows checked"
+     "detail": "31 rows checked"
     },
     {
      "id": "citation",
@@ -944,27 +1119,27 @@
     {
      "id": "effects",
      "name": "Adjustments within plausible bounds",
-     "status": "skip",
-     "detail": "no adjustments"
+     "status": "pass",
+     "detail": "6 adjustments"
     },
     {
      "id": "marginal",
      "name": "Simulated population matches the source",
      "status": "pass",
-     "detail": "2 groups checked, all within the allowed margin; the largest group is off by 0.06 percentage points"
+     "detail": "22 groups checked, all within the allowed margin; the largest group is off by 0.21 percentage points after adjustments and calibration"
     },
     {
      "id": "conditional",
      "name": "Adjustments reproduce their sourced effect",
      "status": "skip",
-     "detail": "no adjustments"
+     "detail": "only checked for yes/no traits so far"
     }
    ]
   }
  ],
  "summary": {
-  "traits": 14,
-  "passed": 14,
+  "traits": 16,
+  "passed": 16,
   "failed": 0
  }
 }

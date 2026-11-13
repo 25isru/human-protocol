@@ -44,7 +44,7 @@ export function Accuracy() {
                 <tbody>
                   {t.examples.map((e, i) => (
                     <tr key={i}>
-                      <td>{Object.keys(e.stratum).length ? groupLabel(e.stratum, registry) : "everyone"}</td>
+                      <td>{Object.keys(e.stratum).length ? groupLabel(e.stratum, registry, undefined, spec.world_label) : "everyone"}</td>
                       <td>{e.what === "yes" ? "share" : e.what === "average" ? "average" : t.id === "frame.country" ? registry.geo[e.what]?.name ?? e.what : spec.category_labels?.[e.what] ?? (t.id === "frame.age" ? `age ${e.what}` : e.what)}</td>
                       <td className="num">{fmt(e.expected, e.unit)}</td>
                       <td className="num">{fmt(e.simulated, e.unit)}</td>

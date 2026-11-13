@@ -86,7 +86,17 @@
     "title": "LGBT+ Pride 2023: a 30-country Ipsos Global Advisor survey",
     "publisher": "Ipsos (online survey of 22,514 adults under 75, February to March 2023)",
     "url": "https://www.ipsos.com/en/pride-month-2023-9-of-adults-identify-as-lgbt",
-    "retrieved_via": "Summary article read directly",
-    "used_for": "30-country average shares identifying as gay or lesbian (by sex), bisexual, pansexual or asexual"
+    "retrieved_via": "Report PDF supplied by the project owner; figures read from the charts on pages 5 and 6 and cross-checked against the PDF's chart objects",
+    "used_for": "Share identifying as gay or lesbian, bisexual, pansexual or asexual in 30 countries, and 30-country averages by sex and generation"
+  },
+  "pew_religion_2025": {
+    "type": "pooled_analysis",
+    "grade": "A",
+    "year": 2025,
+    "title": "Dataset of Global Religious Composition Estimates for 2010 and 2020",
+    "publisher": "Hackett, Stonawski, Tong, Kramer and Shi. Pew Research Center (based on more than 2,700 censuses and surveys)",
+    "url": "https://doi.org/10.58094/vhrw-k516",
+    "retrieved_via": "Dataset downloaded from pewresearch.org by the project owner (unrounded counts file, 2020 rows)",
+    "used_for": "Number of people in seven religious groups by country, 2020"
   }
 }

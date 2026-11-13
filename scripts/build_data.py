@@ -130,6 +130,10 @@ for spec in [
      "value_type": "derived", "parents": ["frame.age"], "derive": {"fn": "age_group5"}},
     {"id": "frame.birth_cohort", "label": "Birth cohort", "tier": 0, "definition": "Five-year birth cohort.", "hidden": True,
      "value_type": "derived", "parents": ["frame.birth_year"], "derive": {"fn": "cohort5"}},
+    {"id": "frame.generation", "label": "Generation", "tier": 0, "hidden": True,
+     "definition": "Generation by birth year, using the bands of the Ipsos 2023 survey: 1997 or later, 1981 to 1996, 1965 to 1980, 1964 or earlier.",
+     "value_type": "derived", "parents": ["frame.birth_year"],
+     "derive": {"fn": "bins", "from": "frame.birth_year", "edges": [1965, 1981, 1997], "labels": ["boomer_or_older", "gen_x", "millennial", "gen_z"]}},
     {"id": "geo.subregion", "label": "Subregion", "tier": 1, "definition": "UN M49 subregion of the country.",
      "value_type": "derived", "parents": ["frame.country"], "derive": {"fn": "geo", "field": "subregion"}},
     {"id": "geo.region", "label": "Region", "tier": 1, "definition": "UN M49 region of the country.",
@@ -274,25 +278,101 @@ write({"id": "body.left_handed", "version": 1, "label": "Left-handed", "tier": 3
        "notes": ["One worldwide rate. The source reports that the rate varies by region and is lower where "
                  "left-hand use is discouraged; that variation is not modelled yet."]})
 
-# identity.sexual_orientation | sex   (Ipsos 2023, 30-country averages as stated in the report text)
+# social.religion | country   (Pew Research Center, 2020 estimates; file supplied by the owner)
+REL = ["Christians", "Muslims", "Religiously_unaffiliated", "Hindus", "Buddhists", "Jews", "Other_religions"]
+pew_dir = next((EXT / "pew").glob("*"))
+pw = pd.read_csv(next(pew_dir.glob("*(unrounded counts).csv")), encoding="utf-8-sig")
+pw = pw[(pw.Year == 2020) & (pw.Level == 1)]
+rows, miss = {}, []
+for _, r in pw.iterrows():
+    c = str(int(r.Countrycode))
+    if c not in geo: c = code_of(r.Country)
+    if not c: miss.append(r.Country); continue
+    rows[(c,)] = [float(str(r[k]).replace(",", "")) for k in REL]
+print(f"  [religion] countries: {len(rows)}, unmatched: {miss}")
+rows = aggregate(rows, lambda c: 1.0)          # counts, so regional sums are exact
+rows = {k: [x / sum(v) for x in v] for k, v in rows.items()}
+write({"id": "social.religion", "version": 1, "label": "Religion", "tier": 4,
+       "definition": "The religious group the person identifies with, if any.",
+       "value_type": "categorical", "categories": REL, "tags": ["sensitive"],
+       "category_labels": {"Christians": "Christian", "Muslims": "Muslim", "Religiously_unaffiliated": "No religion",
+                           "Hindus": "Hindu", "Buddhists": "Buddhist", "Jews": "Jewish", "Other_religions": "Another religion"},
+       "phrases": {"Christians": "is Christian", "Muslims": "is Muslim", "Religiously_unaffiliated": "has no religion",
+                   "Hindus": "is Hindu", "Buddhists": "is Buddhist", "Jews": "is Jewish", "Other_religions": "follows another religion"},
+       "parents": ["frame.country"],
+       "baseline": {"keys": ["frame.country"], "backoff": [{"key": "frame.country", "via": "geo_hierarchy"}],
+                    "dist_kind": "categorical", "table": table(rows, 4)},
+       "modifiers": [], "ref_year": 2020, "source_ids": ["pew_religion_2025"], "grade": "A",
+       "notes": ["Identity, not belief or practice: someone counted as Christian or Muslim may not be observant.",
+                 "'Another religion' includes Sikhs, Jains, Baha'is, Daoists, Shintoists and folk or traditional religions.",
+                 "Children are counted in the source, generally under their parents' religion.",
+                 "One set of shares per country; differences by age or sex are not modelled yet."]})
+
+# identity.sexual_orientation | country, adjusted for sex and generation   (Ipsos 2023 report, pages 5 and 6)
+# Whole percentages as printed on the page-5 chart: [gay/lesbian, bisexual, pansexual, asexual, total LGB+].
+# None = no labelled segment (under 1%). Read from the page image and cross-checked against the PDF's chart objects.
+IPSOS = {
+    "W": [3, 4, 1, 1, 8],  # 30-country average, used for every country that was not surveyed
+    "Brazil": [5, 7, 1, 1, 14], "Spain": [6, 5, 1, 1, 12], "Netherlands": [3, 7, 1, 1, 11], "United Kingdom": [4, 4, 1, 1, 11],
+    "New Zealand": [4, 4, 1, 1, 10], "Australia": [4, 4, 1, 1, 10], "Colombia": [4, 5, 1, 1, 10], "Switzerland": [4, 2, 2, 2, 9],
+    "Canada": [4, 4, 1, 1, 9], "France": [4, 3, 1, 1, 9], "Germany": [3, 4, 1, 1, 9], "United States": [3, 5, 1, None, 9],
+    "Belgium": [3, 4, 1, 1, 8], "Mexico": [2, 5, None, 1, 8], "Argentina": [2, 5, None, 1, 8], "Chile": [3, 4, 1, None, 8],
+    "Thailand": [4, 3, 1, 1, 8], "Turkey": [1, 5, None, 1, 8], "Sweden": [1, 4, 1, 1, 7], "Singapore": [2, 3, 1, 1, 7],
+    "South Africa": [3, 3, 1, None, 7], "Italy": [2, 3, 1, 1, 7], "Romania": [1, 4, 1, None, 7], "Hungary": [2, 3, 1, None, 6],
+    "Portugal": [2, 3, 1, 1, 6], "South Korea": [1, 3, 1, 1, 6], "Ireland": [1, 2, 1, 1, 5], "Poland": [2, 2, 1, 1, 5],
+    "Japan": [None, 1, None, 2, 4], "Peru": [1, 2, None, None, 4],
+}
 ORI = ["straight", "gay_lesbian", "bisexual", "pansexual", "asexual"]
-write({"id": "identity.sexual_orientation", "version": 1, "label": "Sexual orientation", "tier": 6,
+rows = {}
+for name, (*vals, total) in IPSOS.items():
+    c = "W" if name == "W" else code_of(name)
+    assert c, name
+    blanks = [i for i, v in enumerate(vals) if v is None]
+    # An unlabelled segment is under 1%. Share out whatever the printed total leaves over, with a floor of 0.2%.
+    left = max(total - sum(v or 0 for v in vals), 0)
+    filled = [v if v is not None else max(left / len(blanks), 0.2) for v in vals]
+    rows[(c,)] = [1 - sum(filled) / 100] + [v / 100 for v in filled]
+ln = lambda x: round(math.log(x), 4)
+NONSTRAIGHT = ORI[1:]
+NO_CI = "The survey report publishes whole percentages without confidence intervals."
+gen_mod = lambda gid, total: {
+    "id": gid, "when": {"trait": "frame.generation", "op": "eq", "value": gid},
+    "effect": {"kind": "category_shift", "betas": {k: ln(total / 8) for k in NONSTRAIGHT}},
+    "no_ci_reason": NO_CI, "overlap_group": "generation", "mechanism": "social", "source_ids": ["ipsos_pride_2023"], "grade": "C",
+    "rationale": f"Across the 30 countries, {total}% of this generation identified as gay, lesbian, bisexual, pansexual or asexual, against 8% of all adults."}
+write({"id": "identity.sexual_orientation", "version": 2, "label": "Sexual orientation", "tier": 6,
        "definition": "How the person describes their own sexual orientation in an anonymous survey.",
-       "value_type": "categorical", "categories": ORI, "tags": ["sensitive"],
+       "value_type": "categorical", "categories": ORI, "tags": ["sensitive"], "world_label": "the 30 surveyed countries",
        "category_labels": {"straight": "Straight (or did not say otherwise)", "gay_lesbian": "Gay or lesbian",
                            "bisexual": "Bisexual", "pansexual": "Pansexual", "asexual": "Asexual"},
        "phrases": {"straight": "is straight", "gay_lesbian": "is {gay_word}", "bisexual": "is bisexual",
                    "pansexual": "is pansexual", "asexual": "is asexual"},
        "applies_when": {"trait": "frame.age", "op": "gte", "value": 18},
-       "parents": ["frame.sex"],
-       "baseline": {"keys": ["frame.sex"], "backoff": [], "dist_kind": "categorical",
-                    "table": {"male": [0.90, 0.04, 0.04, 0.01, 0.01], "female": [0.93, 0.01, 0.04, 0.01, 0.01]}},
-       "modifiers": [], "ref_year": 2023, "source_ids": ["ipsos_pride_2023"], "grade": "C", "low_confidence": True,
-       "notes": ["Based on averages across 30 countries in an online survey: 3% gay or lesbian (4% of men, 1% of women), "
-                 "4% bisexual, 1% pansexual and 1% asexual. Everyone else, including people who preferred not to say, is counted as straight.",
-                 "The same rates are used for every country and age. The survey found large differences between countries and "
-                 "much higher rates among younger adults; those are not modelled yet.",
-                 "This measures what people say about themselves. Where being open is unsafe, fewer people say it."]})
+       "parents": ["frame.country", "frame.sex", "frame.generation"],
+       "baseline": {"keys": ["frame.country"], "backoff": [{"key": "frame.country", "via": "geo_hierarchy"}],
+                    "dist_kind": "categorical", "table": table(rows, 4)},
+       "modifiers": [
+           {"id": "male", "when": {"trait": "frame.sex", "op": "eq", "value": "male"},
+            "effect": {"kind": "category_shift", "betas": {"gay_lesbian": ln(4 / 3)}}, "no_ci_reason": NO_CI,
+            "mechanism": "unknown", "source_ids": ["ipsos_pride_2023"], "grade": "C",
+            "rationale": "4% of men identified as gay, against 3% of all adults; other answers did not differ by sex."},
+           {"id": "female", "when": {"trait": "frame.sex", "op": "eq", "value": "female"},
+            "effect": {"kind": "category_shift", "betas": {"gay_lesbian": ln(1 / 3)}}, "no_ci_reason": NO_CI,
+            "mechanism": "unknown", "source_ids": ["ipsos_pride_2023"], "grade": "C",
+            "rationale": "1% of women identified as lesbian or gay, against 3% of all adults; other answers did not differ by sex."},
+           gen_mod("gen_z", 16), gen_mod("millennial", 9), gen_mod("gen_x", 5), gen_mod("boomer_or_older", 4)],
+       "ref_year": 2023, "source_ids": ["ipsos_pride_2023"], "grade": "C", "low_confidence": True,
+       "assumptions": [
+           {"what": "Countries that were not surveyed use the 30-country average",
+            "why": "The survey covers 30 countries, mostly in Europe and the Americas. Nothing comparable exists for most of Africa, the Middle East and Asia.", "grade": "D"},
+           {"what": "The differences by sex and by generation are the same in every country",
+            "why": "The report gives them only as 30-country averages.", "grade": "D"},
+           {"what": "People aged 75 and over are treated like the oldest surveyed generation",
+            "why": "The survey interviewed adults under 75.", "grade": "D"}],
+       "notes": ["Online survey of 22,514 adults. Everyone who did not pick one of the four listed identities, including people who preferred not to say, is counted as straight.",
+                 "In nine of the countries the online sample is more urban, educated or affluent than the general population.",
+                 "This measures what people say about themselves. Where being open is unsafe, fewer people say it.",
+                 "Figures are whole percentages, so small categories are imprecise."]})
 
 (OUT / "geo.json").write_text(json.dumps(geo, indent=4, ensure_ascii=False))
 print("countries:", len(geo))

@@ -86,3 +86,5 @@ code { font-family: ui-monospace, Menlo, monospace; }
 .hint { margin: 0; padding: 12px 24px; color: var(--soft); font-size: 0.85rem; border-bottom: 1px solid var(--line); }
 main { padding-top: 28px; } .controls { margin: 18px 0 16px; } .roll { padding: 12px 26px; }
 @media (max-width: 520px) { .tiles { grid-template-columns: repeat(2, 1fr); } .card-head { padding: 16px; gap: 12px; } .flag { font-size: 2rem; } .detail, .hint { padding-left: 16px; padding-right: 16px; } }
+.tiles { gap: 0; background: var(--card); overflow: hidden; }
+.tile { box-shadow: 1px 0 0 var(--line), 0 1px 0 var(--line); }

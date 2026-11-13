@@ -31,6 +31,11 @@ function derive(spec: TraitSpec, person: Person, reg: Registry): Value {
     }
     case "cohort5": return String(Math.floor(Number(person["frame.birth_year"]) / 5) * 5);
     case "geo": return reg.geo[String(person["frame.country"])]?.[d.field] ?? null;
+    case "bins": {
+      const x = Number(person[d.from]);
+      const i = d.edges.findIndex((e) => x < e);
+      return d.labels[i < 0 ? d.labels.length - 1 : i];
+    }
   }
 }
 
@@ -72,7 +77,7 @@ export function lookup(table: ConditionalTable, person: Person, reg: Registry) {
     stratum[k] = current[i];
     if (current[i] !== exact[i]) steps.push({ key: k, from: exact[i], to: current[i] });
   });
-  return { row, stratum, steps };
+  return { row, stratum, steps, key: current.join("|") };
 }
 
 function baseDist(spec: TraitSpec, row: number[]): Dist {
@@ -84,13 +89,15 @@ function baseDist(spec: TraitSpec, row: number[]): Dist {
 }
 
 /** Applies active modifiers and the calibration offset to a baseline distribution. */
-export function compose(spec: TraitSpec, base: Dist, person: Person, conditioned: Set<string>) {
+export function compose(spec: TraitSpec, base: Dist, person: Person, conditioned: Set<string>, rowKey = "") {
   const active = spec.modifiers.filter((m) => evaluate(m.when, person) && !predicateTraits(m.when).every((t) => conditioned.has(t)));
   const groupCount = new Map<string, number>();
   for (const m of active) if (m.overlap_group) groupCount.set(m.overlap_group, (groupCount.get(m.overlap_group) ?? 0) + 1);
   const applied = active.map((m) => {
     const overlapping = m.overlap_group && groupCount.get(m.overlap_group)! > 1 && !(m.adjusted_for?.length);
-    const beta = m.effect.kind === "log_odds" ? m.effect.beta : m.effect.kind === "mean_shift" ? m.effect.delta : m.effect.factor;
+    const e = m.effect;
+    const beta = e.kind === "log_odds" ? e.beta : e.kind === "mean_shift" ? e.delta : e.kind === "sd_scale" ? e.factor
+      : Object.values(e.betas).reduce((a, b) => (Math.abs(b) > Math.abs(a) ? b : a), 0);
     return { m, weight: overlapping ? 0.5 : 1, beta };
   });
   const offset = spec.calibration_offset ?? 0;
@@ -100,14 +107,18 @@ export function compose(spec: TraitSpec, base: Dist, person: Person, conditioned
     const capped = Math.max(-LOG_ODDS_CAP, Math.min(LOG_ODDS_CAP, shift));
     if (applied.length || offset) dist = { kind: "bernoulli", p: expit(logit(clampP(base.p)) + offset + capped) };
   } else if (base.kind === "categorical") {
-    if (applied.length) {
-      const logp = base.p.map((p) => Math.log(Math.max(p, 1e-12)));
+    const rowOffsets = spec.baseline?.calibration?.[rowKey];
+    if (applied.length || rowOffsets) {
+      const shift = base.categories.map(() => 0);
       for (const a of applied) {
-        if (a.m.effect.kind !== "log_odds" || !a.m.effect.category) continue;
-        const i = base.categories.indexOf(a.m.effect.category);
-        if (i >= 0) logp[i] += Math.max(-LOG_ODDS_CAP, Math.min(LOG_ODDS_CAP, a.weight * a.beta));
+        const e = a.m.effect;
+        const betas = e.kind === "category_shift" ? e.betas : e.kind === "log_odds" && e.category ? { [e.category]: e.beta } : {};
+        for (const [cat, beta] of Object.entries(betas)) {
+          const i = base.categories.indexOf(cat);
+          if (i >= 0) shift[i] += a.weight * beta;
+        }
       }
-      const z = logp.map(Math.exp);
+      const z = base.p.map((p, i) => (p <= 0 ? 0 : p * Math.exp(Math.max(-LOG_ODDS_CAP, Math.min(LOG_ODDS_CAP, shift[i])) + (rowOffsets?.[i] ?? 0))));
       const total = z.reduce((s, x) => s + x, 0);
       dist = { ...base, p: z.map((x) => x / total) };
     }
@@ -146,7 +157,7 @@ function coerce(spec: TraitSpec, raw: string | number | boolean): Value {
 export function resolve(spec: TraitSpec, person: Person, reg: Registry) {
   const found = lookup(spec.baseline!, person, reg);
   if (!found) return undefined;
-  const { dist, applied } = compose(spec, baseDist(spec, found.row), person, new Set(Object.keys(found.stratum)));
+  const { dist, applied } = compose(spec, baseDist(spec, found.row), person, new Set(Object.keys(found.stratum)), found.key);
   return { ...found, dist, applied };
 }
 

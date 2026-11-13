@@ -76,3 +76,39 @@ describe(`simulated population of ${N.toLocaleString()} people`, () => {
     expect(Math.abs(share(g, (p) => p["origin.setting"] === "urban") - row("origin.setting", "76")[0])).toBeLessThan(0.01);
   });
 });
+
+describe("sexual orientation and religion", () => {
+  const adults = () => people.filter((p) => p["identity.sexual_orientation"] !== null);
+  const lgb = (rows: Record<string, Value>[]) => share(rows, (p) => p["identity.sexual_orientation"] !== "straight");
+
+  it("keeps each surveyed country's overall share after the sex and generation adjustments (Brazil, United States)", () => {
+    for (const code of ["76", "840"]) {
+      const g = adults().filter((p) => p["frame.country"] === code);
+      const expected = 1 - row("identity.sexual_orientation", code)[0];
+      expect(Math.abs(lgb(g) - expected), reg.geo[code].name).toBeLessThan(0.012);
+    }
+  });
+
+  it("makes younger generations more likely to identify as LGB+, roughly in the surveyed ratio", () => {
+    const by = (gen: string) => lgb(adults().filter((p) => p["frame.generation"] === gen));
+    expect(by("gen_z")).toBeGreaterThan(by("millennial"));
+    expect(by("millennial")).toBeGreaterThan(by("gen_x"));
+    expect(by("gen_x")).toBeGreaterThan(by("boomer_or_older"));
+    const ratio = by("gen_z") / by("boomer_or_older"); // survey: 16% vs 4%
+    expect(ratio).toBeGreaterThan(3);
+    expect(ratio).toBeLessThan(5);
+  });
+
+  it("makes men about four times as likely as women to identify as gay or lesbian", () => {
+    const gay = (sex: string) => share(adults().filter((p) => p["frame.sex"] === sex), (p) => p["identity.sexual_orientation"] === "gay_lesbian");
+    const ratio = gay("male") / gay("female");
+    expect(ratio).toBeGreaterThan(3.2);
+    expect(ratio).toBeLessThan(4.8);
+  });
+
+  it("matches the world's religious make-up to within 1.5 percentage points", () => {
+    const spec = reg.traits.get("social.religion")!;
+    const world = row("social.religion", "W");
+    spec.categories!.forEach((c, i) => expect(Math.abs(share(people, (p) => p["social.religion"] === c) - world[i]), c).toBeLessThan(0.015));
+  });
+});

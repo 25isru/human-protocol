@@ -11,8 +11,8 @@ const pct = (p: number) => {
   return `${x >= 10 ? x.toFixed(0) : x >= 1 ? x.toFixed(1) : x.toFixed(2)}%`;
 };
 
-export function placeName(code: string, reg: Registry): string {
-  if (code === "W") return "the world";
+export function placeName(code: string, reg: Registry, worldLabel = "the world"): string {
+  if (code === "W") return worldLabel;
   if (code.startsWith("S:") || code.startsWith("R:")) return code.slice(2);
   return reg.geo[code]?.name ?? code;
 }
@@ -42,17 +42,17 @@ export function formatValue(spec: TraitSpec, t: RolledTrait, reg: Registry): str
 }
 
 /** "women aged 30 to 34 in Sweden" from a stratum. */
-export function groupLabel(s: Record<string, string>, reg: Registry, sexHint?: string): string {
+export function groupLabel(s: Record<string, string>, reg: Registry, sexHint?: string, worldLabel?: string): string {
   const sex = s["frame.sex"] ?? sexHint;
   let who = sex === "male" ? "men" : sex === "female" ? "women" : "people";
   if (s["frame.age_group"]) who += ` aged ${s["frame.age_group"].replace("--", " to ").replace("100+", "100 or over")}`;
   if (s["frame.birth_cohort"]) who += ` born ${s["frame.birth_cohort"]} to ${Number(s["frame.birth_cohort"]) + 4}`;
-  if (s["frame.country"]) who += ` in ${placeName(s["frame.country"], reg)}`;
+  if (s["frame.country"]) who += ` in ${placeName(s["frame.country"], reg, worldLabel)}`;
   return who;
 }
 
 function group(spec: TraitSpec, t: RolledTrait, reg: Registry, profile: Profile): string {
-  return groupLabel(t.trace.stratum, reg, spec.parents.includes("frame.sex") ? String(profile.traits["frame.sex"].value) : undefined);
+  return groupLabel(t.trace.stratum, reg, spec.parents.includes("frame.sex") ? String(profile.traits["frame.sex"].value) : undefined, spec.world_label);
 }
 
 export function explain(spec: TraitSpec, t: RolledTrait, reg: Registry, profile: Profile): string[] {
@@ -76,12 +76,14 @@ export function explain(spec: TraitSpec, t: RolledTrait, reg: Registry, profile:
     if (trace.percentile !== undefined) lines.push(`This person is ${spec.id === "body.height_cm" ? "taller" : "higher"} than about ${pct(trace.percentile)} of that group.`);
   } else if (d.kind === "bernoulli") {
     lines.push(`About ${pct(d.p)} of ${who} ${spec.id === "body.left_handed" ? "are left-handed" : spec.id === "health.smoker_daily" ? "smoke daily" : "have this trait"}. This roll came up ${t.value ? "yes" : "no"}.`);
+  } else if (trace.modifiers.length) {
+    lines.push(`Starting from the figures for people in ${placeName(trace.stratum["frame.country"] ?? "W", reg, spec.world_label)} and applying the adjustments below, about ${pct(trace.probability!)} of people like this one fall in this category.`);
   } else {
     lines.push(`${pct(trace.probability!)} of ${who} fall in this category.`);
   }
   for (const m of trace.modifiers) lines.push(`Adjustment applied: ${m.rationale}`);
   for (const b of trace.backoff_steps) {
-    if (b.key === "frame.country") lines.push(`There is no figure for ${placeName(b.from, reg)}, so the average for ${placeName(b.to, reg)} was used instead.`);
+    if (b.key === "frame.country") lines.push(`There is no figure for ${placeName(b.from, reg)}, so the average for ${placeName(b.to, reg, spec.world_label)} was used instead.`);
     else if (b.key === "frame.birth_cohort") lines.push(`The data ends with people born in the late 1990s, so the most recent group (born ${b.to} to ${Number(b.to) + 4}) was used.`);
     else lines.push(`No exact match for ${b.from}; used ${b.to}.`);
   }

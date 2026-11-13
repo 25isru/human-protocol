@@ -68,10 +68,12 @@ function effectGate(spec: TraitSpec): GateResult {
   if (!spec.modifiers.length) return { id: "effects", name: "Adjustments within plausible bounds", status: "skip", detail: "no adjustments" };
   const bad: string[] = [];
   for (const m of spec.modifiers) {
-    const size = m.effect.kind === "log_odds" ? Math.abs(m.effect.beta) : m.effect.kind === "mean_shift" ? Math.abs(m.effect.delta) : Math.abs(Math.log(m.effect.factor));
+    const e = m.effect;
+    const size = e.kind === "log_odds" ? Math.abs(e.beta) : e.kind === "mean_shift" ? Math.abs(e.delta) : e.kind === "sd_scale" ? Math.abs(Math.log(e.factor))
+      : Math.max(...Object.values(e.betas).map(Math.abs));
     const limit = m.effect.kind === "mean_shift" && m.effect.scale === "sd" ? 2 : 3;
     if (size > limit && m.grade !== "A") bad.push(`${m.id}: effect too large for its evidence grade`);
-    if (!m.ci95) bad.push(`${m.id}: no confidence interval`);
+    if (!m.ci95) { if (!m.no_ci_reason) bad.push(`${m.id}: no confidence interval and no reason given`); }
     else if (m.ci95[0] <= 0 && m.ci95[1] >= 0 && m.effect.kind !== "sd_scale") bad.push(`${m.id}: interval includes no effect`);
     if (!m.rationale || !m.source_ids.length) bad.push(`${m.id}: missing rationale or source`);
   }
