@@ -1,0 +1,1 @@
+{"id":"geo.subregion","label":"Subregion","tier":1,"definition":"UN M49 subregion of the country.","value_type":"derived","parents":["frame.country"],"derive":{"fn":"geo","field":"subregion"},"version":1,"modifiers":[],"source_ids":["un_wpp_2024"],"grade":"A","notes":[]}

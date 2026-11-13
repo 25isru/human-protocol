@@ -1,0 +1,1 @@
+{"id":"frame.birth_cohort","label":"Birth cohort","tier":0,"definition":"Five-year birth cohort.","hidden":true,"value_type":"derived","parents":["frame.birth_year"],"derive":{"fn":"cohort5"},"version":1,"modifiers":[],"source_ids":[],"grade":"A","notes":[]}

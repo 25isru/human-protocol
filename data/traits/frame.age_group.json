@@ -1,0 +1,1 @@
+{"id":"frame.age_group","label":"Age group","tier":0,"definition":"Five-year age group.","hidden":true,"value_type":"derived","parents":["frame.age"],"derive":{"fn":"age_group5"},"version":1,"modifiers":[],"source_ids":[],"grade":"A","notes":[]}

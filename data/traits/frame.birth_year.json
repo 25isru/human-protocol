@@ -1,0 +1,1 @@
+{"id":"frame.birth_year","label":"Birth year","tier":0,"definition":"2026 minus age.","value_type":"derived","parents":["frame.age"],"derive":{"fn":"birth_year","as_of":2026},"version":1,"modifiers":[],"source_ids":[],"grade":"A","notes":[]}

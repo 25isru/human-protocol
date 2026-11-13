@@ -1,0 +1,66 @@
+{
+  "un_wpp_2024": {
+    "type": "official_stats", "grade": "A", "year": 2024,
+    "title": "World Population Prospects 2024",
+    "publisher": "United Nations, Department of Economic and Social Affairs, Population Division",
+    "url": "https://population.un.org/wpp/",
+    "retrieved_via": "https://github.com/PPgp/wpp2024 (R package wpp2024 v1.1-3, table popprojAge1dt)",
+    "used_for": "Population by country, sex and single year of age, medium projection for 2026; UN regions"
+  },
+  "un_wup_2018": {
+    "type": "official_stats", "grade": "A", "year": 2018,
+    "title": "World Urbanization Prospects: The 2018 Revision",
+    "publisher": "United Nations, Department of Economic and Social Affairs, Population Division",
+    "url": "https://population.un.org/wup/",
+    "retrieved_via": "https://github.com/owid/owid-datasets (Urban and rural population 1950-2050)",
+    "used_for": "Urban and rural population by country, projection for 2026"
+  },
+  "ncd_risc_height_2016": {
+    "type": "pooled_analysis", "grade": "A", "year": 2016,
+    "title": "A century of trends in adult human height",
+    "publisher": "NCD Risk Factor Collaboration, eLife 5:e13410",
+    "url": "https://doi.org/10.7554/eLife.13410",
+    "retrieved_via": "https://github.com/owid/owid-datasets (Human Height - NCD RisC (2017))",
+    "used_for": "Mean adult height by country, sex and birth year, 1896 to 1996"
+  },
+  "dhs_height_sd_2018": {
+    "type": "pooled_analysis", "grade": "B", "year": 2018,
+    "title": "Analysis of the mean and spread of women's height in 59 countries using Demographic and Health Surveys",
+    "publisher": "PubMed Central, article PMC5947892",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5947892",
+    "retrieved_via": "Read directly",
+    "used_for": "Range of within-country standard deviations of women's height (5.2 to 11.8 cm)"
+  },
+  "wic_2023": {
+    "type": "pooled_analysis", "grade": "A", "year": 2023,
+    "title": "Wittgenstein Centre Data Explorer, Version 3",
+    "publisher": "Wittgenstein Centre for Demography and Global Human Capital (IIASA, OeAW, University of Vienna)",
+    "url": "https://dataexplorer.wittgensteincentre.org/",
+    "retrieved_via": "https://github.com/guyabel/wcde-data (wcde-v3-batch, scenario 2, pop-age-sex-edattain)",
+    "used_for": "Population by country, age group, sex and educational attainment, medium scenario for 2025"
+  },
+  "ihme_smoking_2012": {
+    "type": "pooled_analysis", "grade": "B", "year": 2014,
+    "title": "Global Smoking Prevalence and Cigarette Consumption 1980-2012",
+    "publisher": "Institute for Health Metrics and Evaluation (IHME), Global Health Data Exchange",
+    "url": "http://ghdx.healthdata.org/record/global-smoking-prevalence-and-cigarette-consumption-1980-2012",
+    "retrieved_via": "https://github.com/owid/owid-datasets (Smoking prevalence and cigarette consumption (IHME, GHDx (2012)))",
+    "used_for": "Daily smoking prevalence by country and sex, 2012"
+  },
+  "handedness_meta_2020": {
+    "type": "meta_analysis", "grade": "A", "year": 2020,
+    "title": "Human handedness: A meta-analysis",
+    "publisher": "Papadatou-Pastou, Ntolka, Schmitz, Martin, Munafo, Ocklenburg, Paracchini. Psychological Bulletin 146(6), 481-524",
+    "url": "https://doi.org/10.1037/bul0000229",
+    "retrieved_via": "Abstract read directly",
+    "used_for": "Best overall estimate of left-handedness: 10.6% (2,396,170 people)"
+  },
+  "handedness_sex_2008": {
+    "type": "meta_analysis", "grade": "A", "year": 2008,
+    "title": "Sex differences in left-handedness: a meta-analysis of 144 studies",
+    "publisher": "Papadatou-Pastou, Martin, Munafo, Jones. Psychological Bulletin 134(5), 677-699",
+    "url": "https://doi.org/10.1037/a0012814",
+    "retrieved_via": "Abstract read directly (PubMed 18729568)",
+    "used_for": "Male-to-female odds ratio for left-handedness: 1.23 (95% CI 1.19 to 1.27)"
+  }
+}
