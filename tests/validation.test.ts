@@ -29,8 +29,8 @@ describe("validation gates", () => {
   });
 
   it("catch a trait with no source", () => {
-    const bad = withChange("health.smoker_daily", (s) => ({ ...s, source_ids: [] }));
-    expect(statusOf(runGates(bad, 2000), "health.smoker_daily", "citation")).toBe("fail");
+    const bad = withChange("health.smoker", (s) => ({ ...s, source_ids: [] }));
+    expect(statusOf(runGates(bad, 2000), "health.smoker", "citation")).toBe("fail");
   });
 
   it("catch an adjustment that shifts the population rate away from the source", () => {

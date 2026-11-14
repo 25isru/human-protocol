@@ -28,12 +28,14 @@ everything shown to users must be in plain language with sources.
 - No ancestry or genotype links into personality, cognition, values or social position (confirmed by the owner).
 - Only data that could be traced to a citable source was included. Fewer traits, properly sourced, over many loose ones.
 
-## Reminders for the owner (say these at the start of the next session)
+## Session 2026-11-14
 
-Two files are still needed. The owner asked to be reminded:
-
-1. **Smoking fix:** IHME "GBD 2019 Smoking Tobacco Use Prevalence 1990-2019", the Data CSV, from https://ghdx.healthdata.org/record/ihme-data/gbd-2019-smoking-tobacco-use-prevalence-1990-2019 (likely needs a free account). Fixes the 2012 date and the missing age differences.
-2. **Height for young adults:** NCD-RisC country-level height data for ages 5 to 19, from ncdrisc.org (data downloads, height). Extends height to people born up to about 2000.
+- Owner uploaded the IHME GBD 2019 smoking files and three NCD-RisC height files. No reminders are outstanding.
+- **Smoking** replaced: `health.smoker_daily` (2012) is gone; `health.smoker` uses GBD 2019 current smoking, 204 countries, by sex. The published GBD file only has "15+ years", age-standardised, so there is still no age gradient. Age-specific rates need the GBD Results Tool or national surveys.
+- **Height** version 2: people born 1970 to 2000 now use NCD-RisC 2020 mean height at age 19; people born earlier keep the 2016 adult series. Height also depends on urban or rural residence for people born 1970 to 2000, using the urban-rural gap from NCD-RisC 2023. This is the first trait conditioned on another rolled personal trait.
+- Engine: new backoff `via: "drop"` (falls back to the row keyed `*`); such a step does not lower the evidence grade.
+- Unused uploads: GBD cigarettes per capita, number of smokers, percent change; NCD-RisC global and regional files. Cigarettes per capita could later give "cigarettes per day" for smokers.
+- GitHub Pages: the owner must set Settings, Pages, Source to "GitHub Actions". Until then the site is blank and the deploy job fails.
 
 ## Session 2026-11-13 (third and fourth)
 
@@ -46,9 +48,9 @@ Two files are still needed. The owner asked to be reminded:
 ## Known gaps and honest caveats
 
 - **Height spread is assumed** (SD 7.0 cm men, 6.5 cm women). The source gives means only. Find a sourced SD by country.
-- **Height cohorts end at 1996**; younger adults use the 1995 cohort.
-- **Smoking data is from 2012** and has no age gradient: a 15-year-old gets the national adult rate. Replace with WHO or newer IHME data by age.
-- **Urban/rural** is not conditioned on age or sex, and education is not conditioned on urban/rural.
+- **Height cohorts end at 2000**; adults born later use the 2000 figures. The two height series differ by about 1 cm in many countries, so there is a small step between people born before and after 1970.
+- **Smoking has no age gradient**: a 15-year-old gets the national adult rate.
+- **Urban/rural** is not conditioned on age or sex, and education is not conditioned on urban/rural. Traits are still mostly independent of each other once country, sex and age are fixed (no link between education and smoking, religion and anything, and so on). This is the biggest realism gap.
 - **Left-handedness** uses one worldwide rate; regional variation is documented in the source but not modelled.
 - 36 small territories have no education data and use subregion averages. Holy See is excluded (no age data).
 - Sex is binary because the population statistics are.

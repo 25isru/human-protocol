@@ -15,7 +15,8 @@ export type Predicate =
 
 export type BackoffStep =
   | { key: TraitId; via: "geo_hierarchy" }
-  | { key: TraitId; via: "nearest"; order: string[] };
+  | { key: TraitId; via: "nearest"; order: string[] }
+  | { key: TraitId; via: "drop" }; // fall back to the row that ignores this key (written "*")
 
 /** Row layout by dist_kind: categorical = probabilities per category; bernoulli = [p]; normal = [mean, sd]. */
 export interface ConditionalTable {

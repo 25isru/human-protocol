@@ -94,7 +94,7 @@ function marginalGate(spec: TraitSpec, samples: Sample[]): { result: GateResult;
   const groups = new Map<string, { stratum: Record<string, string>; values: RolledTrait[] }>();
   for (const s of samples) {
     const t = s.traits[spec.id];
-    if (!t.trace.applicable || t.trace.missing_data || t.trace.backoff_steps.length) continue;
+    if (!t.trace.applicable || t.trace.missing_data || t.trace.backoff_steps.some((x) => x.to !== "*")) continue;
     const key = b.keys.map((k) => t.trace.stratum[k]).join("|");
     let g = groups.get(key);
     if (!g) groups.set(key, (g = { stratum: t.trace.stratum, values: [] }));

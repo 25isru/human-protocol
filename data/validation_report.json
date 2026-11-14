@@ -1,5 +1,5 @@
 {
- "registry_version": "a15a68f8",
+ "registry_version": "02c03405",
  "people": 300000,
  "traits": [
   {
@@ -576,75 +576,81 @@
    "examples": [
     {
      "stratum": {
-      "frame.country": "356",
-      "frame.sex": "male",
-      "frame.birth_cohort": "1995"
+      "frame.country": "156",
+      "frame.sex": "female",
+      "frame.birth_cohort": "1965",
+      "origin.setting": "*"
      },
      "what": "average",
-     "expected": 164.95,
-     "simulated": 164.81,
+     "expected": 157.85,
+     "simulated": 157.68,
      "unit": "cm",
-     "n": 2432
+     "n": 2096
     },
     {
      "stratum": {
       "frame.country": "156",
       "frame.sex": "male",
-      "frame.birth_cohort": "1985"
+      "frame.birth_cohort": "1965",
+      "origin.setting": "*"
      },
      "what": "average",
-     "expected": 170.76,
-     "simulated": 170.66,
+     "expected": 168.63,
+     "simulated": 168.61,
      "unit": "cm",
-     "n": 2262
-    },
-    {
-     "stratum": {
-      "frame.country": "356",
-      "frame.sex": "female",
-      "frame.birth_cohort": "1995"
-     },
-     "what": "average",
-     "expected": 152.58,
-     "simulated": 152.69,
-     "unit": "cm",
-     "n": 2152
-    },
-    {
-     "stratum": {
-      "frame.country": "356",
-      "frame.sex": "male",
-      "frame.birth_cohort": "1985"
-     },
-     "what": "average",
-     "expected": 165.1,
-     "simulated": 164.98,
-     "unit": "cm",
-     "n": 2120
+     "n": 2092
     },
     {
      "stratum": {
       "frame.country": "156",
       "frame.sex": "female",
-      "frame.birth_cohort": "1970"
+      "frame.birth_cohort": "1960",
+      "origin.setting": "*"
      },
      "what": "average",
-     "expected": 158.07,
-     "simulated": 157.92,
+     "expected": 157.64,
+     "simulated": 157.58,
      "unit": "cm",
-     "n": 2115
+     "n": 1590
+    },
+    {
+     "stratum": {
+      "frame.country": "156",
+      "frame.sex": "male",
+      "frame.birth_cohort": "1985",
+      "origin.setting": "urban"
+     },
+     "what": "average",
+     "expected": 172.14,
+     "simulated": 171.99,
+     "unit": "cm",
+     "n": 1545
     },
     {
      "stratum": {
       "frame.country": "356",
       "frame.sex": "male",
-      "frame.birth_cohort": "1990"
+      "frame.birth_cohort": "2000",
+      "origin.setting": "rural"
      },
      "what": "average",
-     "expected": 165.01,
-     "simulated": 164.84,
+     "expected": 166.16,
+     "simulated": 166.17,
      "unit": "cm",
-     "n": 2101
+     "n": 1543
+    },
+    {
+     "stratum": {
+      "frame.country": "156",
+      "frame.sex": "male",
+      "frame.birth_cohort": "1960",
+      "origin.setting": "*"
+     },
+     "what": "average",
+     "expected": 168.43,
+     "simulated": 168.55,
+     "unit": "cm",
+     "n": 1522
     }
    ],
    "gates": [
@@ -652,13 +658,13 @@
      "id": "schema",
      "name": "Well-formed data",
      "status": "pass",
-     "detail": "9,618 rows checked"
+     "detail": "15,648 rows checked"
     },
     {
      "id": "citation",
      "name": "Every figure has a source",
      "status": "pass",
-     "detail": "2 sources"
+     "detail": "4 sources"
     },
     {
      "id": "effects",
@@ -670,7 +676,7 @@
      "id": "marginal",
      "name": "Simulated population matches the source",
      "status": "pass",
-     "detail": "50 groups checked, all within the allowed margin; the largest group is off by 0.14 cm"
+     "detail": "74 groups checked, all within the allowed margin; the largest group is off by 0.17 cm"
     },
     {
      "id": "conditional",
@@ -935,8 +941,8 @@
    ]
   },
   {
-   "id": "health.smoker_daily",
-   "label": "Smokes daily",
+   "id": "health.smoker",
+   "label": "Smokes",
    "examples": [
     {
      "stratum": {
@@ -944,8 +950,8 @@
       "frame.sex": "male"
      },
      "what": "yes",
-     "expected": 46.5,
-     "simulated": 46.27,
+     "expected": 49.73,
+     "simulated": 49.48,
      "unit": "%",
      "n": 22190
     },
@@ -955,8 +961,8 @@
       "frame.sex": "female"
      },
      "what": "yes",
-     "expected": 2.2,
-     "simulated": 2.06,
+     "expected": 3.54,
+     "simulated": 3.67,
      "unit": "%",
      "n": 21636
     },
@@ -966,8 +972,8 @@
       "frame.sex": "male"
      },
      "what": "yes",
-     "expected": 21.9,
-     "simulated": 21.97,
+     "expected": 23.04,
+     "simulated": 22.64,
      "unit": "%",
      "n": 20929
     },
@@ -977,8 +983,8 @@
       "frame.sex": "female"
      },
      "what": "yes",
-     "expected": 2.9,
-     "simulated": 2.83,
+     "expected": 3.1,
+     "simulated": 3.18,
      "unit": "%",
      "n": 19669
     },
@@ -988,8 +994,8 @@
       "frame.sex": "male"
      },
      "what": "yes",
-     "expected": 16.9,
-     "simulated": 16.43,
+     "expected": 19.88,
+     "simulated": 20.3,
      "unit": "%",
      "n": 5187
     },
@@ -999,8 +1005,8 @@
       "frame.sex": "female"
      },
      "what": "yes",
-     "expected": 13.7,
-     "simulated": 13.06,
+     "expected": 15.26,
+     "simulated": 14.86,
      "unit": "%",
      "n": 5061
     }
@@ -1010,7 +1016,7 @@
      "id": "schema",
      "name": "Well-formed data",
      "status": "pass",
-     "detail": "432 rows checked"
+     "detail": "466 rows checked"
     },
     {
      "id": "citation",
@@ -1028,7 +1034,7 @@
      "id": "marginal",
      "name": "Simulated population matches the source",
      "status": "pass",
-     "detail": "98 groups checked, all within the allowed margin; the largest group is off by 0.23 percentage points"
+     "detail": "98 groups checked, all within the allowed margin; the largest group is off by 0.25 percentage points"
     },
     {
      "id": "conditional",

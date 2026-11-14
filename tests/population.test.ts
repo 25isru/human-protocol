@@ -35,14 +35,22 @@ describe(`simulated population of ${N.toLocaleString()} people`, () => {
     expect(mean("392")).toBeGreaterThan(mean("566") + 20);
   });
 
-  it("matches mean height for a stratum (within 0.1 SD)", () => {
+  it("matches national mean height for a cohort once urban and rural people are combined (within 0.1 SD)", () => {
     for (const [code, sex, cohort] of [["356", "male", "1990"], ["156", "female", "1985"]]) {
       const g = people.filter((p) => p["frame.country"] === code && p["frame.sex"] === sex && p["frame.birth_cohort"] === cohort);
-      const [mean, sd] = row("body.height_cm", `${code}|${sex}|${cohort}`);
+      const [mean, sd] = row("body.height_cm", `${code}|${sex}|${cohort}|*`);
       const got = g.reduce((s, p) => s + Number(p["body.height_cm"]), 0) / g.length;
       expect(g.length).toBeGreaterThan(500);
       expect(Math.abs(got - mean) / sd, `${code} ${sex} ${cohort}`).toBeLessThan(0.1);
     }
+  });
+
+  it("makes urban adults taller than rural ones where the source says so (India, born 1990 to 1994)", () => {
+    const g = (setting: string) => people.filter((p) => p["frame.country"] === "356" && p["frame.sex"] === "male" && p["frame.birth_cohort"] === "1990" && p["origin.setting"] === setting);
+    const mean = (rows: Record<string, Value>[]) => rows.reduce((s, p) => s + Number(p["body.height_cm"]), 0) / rows.length;
+    const expected = row("body.height_cm", "356|male|1990|urban")[0] - row("body.height_cm", "356|male|1990|rural")[0];
+    expect(expected).toBeGreaterThan(0.5);
+    expect(Math.abs(mean(g("urban")) - mean(g("rural")) - expected)).toBeLessThan(1.2);
   });
 
   it("keeps left-handedness at the sourced 10.6% overall and 1.23 odds ratio between sexes", () => {
@@ -57,7 +65,7 @@ describe(`simulated population of ${N.toLocaleString()} people`, () => {
   it("matches daily smoking among adult men and women in China (within 1 percentage point)", () => {
     for (const sex of ["male", "female"]) {
       const g = people.filter((p) => p["frame.country"] === "156" && p["frame.sex"] === sex && Number(p["frame.age"]) >= 15);
-      expect(Math.abs(share(g, (p) => p["health.smoker_daily"] === true) - row("health.smoker_daily", `156|${sex}`)[0])).toBeLessThan(0.01);
+      expect(Math.abs(share(g, (p) => p["health.smoker"] === true) - row("health.smoker", `156|${sex}`)[0])).toBeLessThan(0.01);
     }
   });
 

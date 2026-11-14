@@ -27,7 +27,7 @@
     "publisher": "NCD Risk Factor Collaboration, eLife 5:e13410",
     "url": "https://doi.org/10.7554/eLife.13410",
     "retrieved_via": "https://github.com/owid/owid-datasets (Human Height - NCD RisC (2017))",
-    "used_for": "Mean adult height by country, sex and birth year, 1896 to 1996"
+    "used_for": "Mean adult height by country, sex and birth year, for people born before 1970"
   },
   "dhs_height_sd_2018": {
     "type": "pooled_analysis",
@@ -48,16 +48,6 @@
     "url": "https://dataexplorer.wittgensteincentre.org/",
     "retrieved_via": "https://github.com/guyabel/wcde-data (wcde-v3-batch, scenario 2, pop-age-sex-edattain)",
     "used_for": "Population by country, age group, sex and educational attainment, medium scenario for 2025"
-  },
-  "ihme_smoking_2012": {
-    "type": "pooled_analysis",
-    "grade": "B",
-    "year": 2014,
-    "title": "Global Smoking Prevalence and Cigarette Consumption 1980-2012",
-    "publisher": "Institute for Health Metrics and Evaluation (IHME), Global Health Data Exchange",
-    "url": "http://ghdx.healthdata.org/record/global-smoking-prevalence-and-cigarette-consumption-1980-2012",
-    "retrieved_via": "https://github.com/owid/owid-datasets (Smoking prevalence and cigarette consumption (IHME, GHDx (2012)))",
-    "used_for": "Daily smoking prevalence by country and sex, 2012"
   },
   "handedness_meta_2020": {
     "type": "meta_analysis",
@@ -98,5 +88,35 @@
     "url": "https://doi.org/10.58094/vhrw-k516",
     "retrieved_via": "Dataset downloaded from pewresearch.org by the project owner (unrounded counts file, 2020 rows)",
     "used_for": "Number of people in seven religious groups by country, 2020"
+  },
+  "ihme_gbd_2019_smoking": {
+    "type": "pooled_analysis",
+    "grade": "A",
+    "year": 2021,
+    "title": "Global Burden of Disease Study 2019 (GBD 2019) Smoking Tobacco Use Prevalence 1990-2019",
+    "publisher": "Global Burden of Disease Collaborative Network. Institute for Health Metrics and Evaluation (IHME), Seattle",
+    "url": "https://ghdx.healthdata.org/record/ihme-data/gbd-2019-smoking-tobacco-use-prevalence-1990-2019",
+    "retrieved_via": "Prevalence file downloaded from the GHDx by the project owner",
+    "used_for": "Age-standardised prevalence of smoking tobacco use among people aged 15 and over, by country and sex, 2019"
+  },
+  "ncd_risc_height_2020": {
+    "type": "pooled_analysis",
+    "grade": "A",
+    "year": 2020,
+    "title": "Height and body-mass index trajectories of school-aged children and adolescents from 1985 to 2019 in 200 countries and territories",
+    "publisher": "NCD Risk Factor Collaboration, The Lancet 396:1511-1524",
+    "url": "https://doi.org/10.1016/S0140-6736(20)31859-6",
+    "retrieved_via": "Country file downloaded from ncdrisc.org by the project owner",
+    "used_for": "Mean height at age 19 by country and sex, 1989 to 2019 (people born 1970 to 2000)"
+  },
+  "ncd_risc_height_2023": {
+    "type": "pooled_analysis",
+    "grade": "A",
+    "year": 2023,
+    "title": "Diminishing benefits of urban living for children and adolescents' growth and development",
+    "publisher": "NCD Risk Factor Collaboration, Nature 615:874-883",
+    "url": "https://doi.org/10.1038/s41586-023-05772-8",
+    "retrieved_via": "Country file downloaded from ncdrisc.org by the project owner",
+    "used_for": "Difference between urban and rural mean height at age 19, by country and sex, 1990 to 2020"
   }
 }

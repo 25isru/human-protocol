@@ -68,11 +68,16 @@ describe("rolling", () => {
   });
   it("uses the nearest birth cohort for young adults", () => {
     const p = roll(reg, { seed: "young", pins: { "frame.country": "356", "frame.age": 20 } });
-    expect(p.traits["body.height_cm"].trace.backoff_steps[0]).toMatchObject({ key: "frame.birth_cohort", to: "1995" });
+    expect(p.traits["body.height_cm"].trace.backoff_steps).toContainEqual(expect.objectContaining({ key: "frame.birth_cohort", to: "2000" }));
   });
   it("finds rows with combined backoff", () => {
     const spec = reg.traits.get("body.height_cm")!;
-    const found = lookup(spec.baseline!, { "frame.country": "492", "frame.sex": "male", "frame.birth_cohort": "2005" }, reg);
-    expect(found?.steps.length).toBe(2);
+    const found = lookup(spec.baseline!, { "frame.country": "492", "frame.sex": "male", "frame.birth_cohort": "2005", "origin.setting": "urban" }, reg);
+    expect(found?.steps.map((x) => x.key).sort()).toEqual(["frame.birth_cohort", "frame.country", "origin.setting"]);
+  });
+  it("uses the national figure for cohorts with no urban or rural split, without shifting the cohort", () => {
+    const spec = reg.traits.get("body.height_cm")!;
+    const found = lookup(spec.baseline!, { "frame.country": "356", "frame.sex": "male", "frame.birth_cohort": "1950", "origin.setting": "urban" }, reg);
+    expect(found?.stratum).toMatchObject({ "frame.birth_cohort": "1950", "origin.setting": "*" });
   });
 });

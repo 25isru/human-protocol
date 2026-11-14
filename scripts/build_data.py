@@ -45,7 +45,12 @@ ALIASES = {
     "Saint Barthlemy": "652", "Faeroe Islands": "234", "Falkland Islands": "238", "Sint Maarten (Dutch part)": "534",
     "Saint Martin (French part)": "663", "Bonaire Sint Eustatius and Saba": "535", "Wallis and Futuna": "876",
     "United States Virgin Islands": "850", "Micronesia (Fed. States of)": "583", "Kosovo": "412",
-    "The Bahamas": "44", "Bahamas": "44", "The Gambia": "270", "Gambia": "270", "Saint Helena": "654",
+    "Bolivia (Plurinational State of)": "68", "Venezuela (Bolivarian Republic of)": "862", "Iran (Islamic Republic of)": "364",
+    "Micronesia (Federated States of)": "583", "Taiwan (Province of China)": "158", "Palestine": "275", "Turkey": "792",
+    "Cote d'Ivoire": "384", "Cabo Verde": "132", "Occupied Palestinian Territory": "275", "Macedonia (TFYR)": "807",
+    "DR Congo": "180", "Guinea Bissau": "624", "Lao PDR": "418", "Micronesia (Federated States of)": "583", "Swaziland": "748",
+    "China (Hong Kong SAR)": "344", "Russian Federation": "643", "Syrian Arab Republic": "760", "Viet Nam": "704",
+    "Democratic People's Republic of Korea": "408", "The Bahamas": "44", "Bahamas": "44", "The Gambia": "270", "Gambia": "270", "Saint Helena": "654",
 }
 def code_of(name):
     c = ALIASES.get(name) or name2code.get(norm(name))
@@ -170,39 +175,71 @@ write({"id": "origin.setting", "version": 1, "label": "Lives in", "tier": 1,
        "notes": ["Projected in 2018 for 2026.", "Not yet conditioned on age or sex.",
                  "Countries define 'urban' differently, so the label is not strictly comparable across borders."]})
 
-# body.height_cm | country, sex, birth cohort   (NCD-RisC 2016/2017)
+# body.height_cm | country, sex, birth cohort, urban or rural
+#   born up to 1969: NCD-RisC 2016 adult series
+#   born 1970 to 2000: NCD-RisC 2020 series, mean height at age 19 (the measurement year minus 19 is the birth year)
+#   urban/rural gap, born 1971 to 2001: NCD-RisC 2023, urban minus rural mean height at age 19
+SD = {"male": 7.0, "female": 6.5}
+SEXMAP = {"Boys": "male", "Girls": "female"}
 h = owid("Human Height - NCD RisC (2017)").iloc[:, :4]
 h.columns = ["entity", "year", "male", "female"]
-report_unmatched("height", h.entity)
-SD = {"male": 7.0, "female": 6.5}
+report_unmatched("height 2016", h.entity)
 acc = defaultdict(list)
-for _, r in h.iterrows():
+for _, r in h[h.year < 1970].iterrows():
     c = code_of(r.entity)
     if not c: continue
-    cohort = str(int(r.year) // 5 * 5)
-    for s in SEXES:
-        if not math.isnan(r[s]): acc[(c, s, cohort)].append(r[s])
-rows = {k: [sum(v) / len(v)] for k, v in acc.items()}
-rows = aggregate(rows, lambda c, s, co: sexpop(c, s))
-rows = {k: [v[0], SD[k[1]]] for k, v in rows.items()}
+    for sx in SEXES:
+        if not math.isnan(r[sx]): acc[(c, sx, str(int(r.year) // 5 * 5))].append(r[sx])
+l = pd.read_csv(next((EXT / "up_50018078").glob("*.csv")))
+l = l[l["Age group"] == 19]
+report_unmatched("height 2020", l.Country)
+for r in l.itertuples():
+    c, by = code_of(r.Country), r.Year - 19
+    if c and by >= 1970: acc[(c, SEXMAP[r.Sex], str(by // 5 * 5))].append(r._5)
+national = {k: [sum(v) / len(v)] for k, v in acc.items()}
+national = aggregate(national, lambda c, sx, co: sexpop(c, sx))
+n23 = pd.read_excel(next((EXT / "up_fb41b501").glob("*.xlsx")))
+n23 = n23[n23["Age group"] == 19]
+report_unmatched("height 2023", n23.Country)
+gap = defaultdict(list)
+for r in n23.itertuples():
+    c, by = code_of(r.Country), r.Year - 19
+    if c and 1970 <= by <= 2000: gap[(c, SEXMAP[r.Sex], str(by // 5 * 5))].append(r._11)
+urban_share = json.loads((OUT / "traits" / "origin.setting.json").read_text())["baseline"]["table"]
+rows = {(c, sx, co, "*"): [v[0], SD[sx]] for (c, sx, co), v in national.items()}
+split = 0
+for (c, sx, co), g in gap.items():
+    if (c, sx, co) not in national or c not in urban_share: continue
+    d, u, m = sum(g) / len(g), urban_share[c][0], national[(c, sx, co)][0]
+    # Urban and rural means are placed around the national mean so that, with today's urban share, the average is unchanged.
+    rows[(c, sx, co, "urban")] = [m + (1 - u) * d, SD[sx]]
+    rows[(c, sx, co, "rural")] = [m - u * d, SD[sx]]
+    split += 1
+print(f"  [height] national rows: {len(national)}, with urban/rural split: {split}")
 cohorts = sorted({k[2] for k in rows}, key=int)
-write({"id": "body.height_cm", "version": 1, "label": "Height", "tier": 3, "unit": "cm",
+write({"id": "body.height_cm", "version": 2, "label": "Height", "tier": 3, "unit": "cm",
        "definition": "Standing adult height.",
        "value_type": "continuous", "support": {"min": 120, "max": 215},
        "phrases": {"*": "is {value} cm tall"},
        "applies_when": {"trait": "frame.age", "op": "gte", "value": 18},
-       "parents": ["frame.country", "frame.sex", "frame.birth_cohort"],
-       "baseline": {"keys": ["frame.country", "frame.sex", "frame.birth_cohort"],
-                    "backoff": [{"key": "frame.birth_cohort", "via": "nearest", "order": cohorts},
+       "parents": ["frame.country", "frame.sex", "frame.birth_cohort", "origin.setting"],
+       "baseline": {"keys": ["frame.country", "frame.sex", "frame.birth_cohort", "origin.setting"],
+                    "backoff": [{"key": "origin.setting", "via": "drop"},
+                                {"key": "frame.birth_cohort", "via": "nearest", "order": cohorts},
                                 {"key": "frame.country", "via": "geo_hierarchy"}],
                     "dist_kind": "normal", "table": table(rows, 5)},
-       "modifiers": [], "ref_year": 2016, "source_ids": ["ncd_risc_height_2016", "dhs_height_sd_2018"], "grade": "A",
+       "modifiers": [], "ref_year": 2020,
+       "source_ids": ["ncd_risc_height_2016", "ncd_risc_height_2020", "ncd_risc_height_2023", "dhs_height_sd_2018"], "grade": "A",
        "assumptions": [{"what": "Standard deviation of 7.0 cm for men and 6.5 cm for women in every country and cohort",
-                        "why": "The source publishes mean height only. Measured within-country spreads are typically 6 to 7 cm, "
+                        "why": "The sources publish mean height only. Measured within-country spreads are typically 6 to 7 cm, "
                                "and a 59-country survey analysis found country-level values for women from 5.2 to 11.8 cm.",
-                        "grade": "D"}],
-       "notes": ["Means cover birth years 1896 to 1996. People born later use the most recent cohort.",
-                 "Regional fallbacks are population-weighted averages of the countries with data.",
+                        "grade": "D"},
+                       {"what": "The urban and rural averages sit either side of the national average in proportion to today's urban share",
+                        "why": "The source gives the urban-rural gap but not the urban share of each birth cohort.", "grade": "D"}],
+       "notes": ["People born before 1970 use adult heights from the 2016 analysis. People born 1970 to 2000 use average height at age 19 from the 2020 analysis, which runs about 1 cm higher in many countries.",
+                 "People born after 2000 use the 2000 figures.",
+                 "The urban-rural difference is known for people born 1971 to 2001. Older people get the national average whichever setting they live in.",
+                 "Where someone lives now stands in for where they grew up.",
                  "Shrinkage of height in old age is not modelled."]})
 
 # social.education | country, sex, age group   (Wittgenstein Centre v3, SSP2, 2025)
@@ -237,30 +274,27 @@ write({"id": "social.education", "version": 1, "label": "Education", "tier": 4,
                  "People aged 15 to 24 may still be studying, so this is attainment to date.",
                  "Not yet linked to urban or rural residence."]})
 
-# health.smoker_daily | country, sex   (IHME 2012)
-s = owid("Smoking prevalence and cigarette consumption (IHME, GHDx (2012))")
-s = s[s.Year == 2012]
-mcol = [c for c in s.columns if c.startswith("Daily smoking prevalence - male")][0]
-fcol = [c for c in s.columns if c.startswith("Daily smoking prevalence - female")][0]
-report_unmatched("smoking", s.Entity)
+# health.smoker | country, sex   (IHME GBD 2019, file supplied by the owner)
+g = pd.read_csv(next((EXT / "up_055c4272").glob("*.CSV")))
+g = g[(g.year_id == 2019) & (g.sex_name != "Both") & (g.measure_name == "Age-Standardized Smoking Prevalence")]
+report_unmatched("smoking", g.location_name)
 rows = {}
-for _, r in s.iterrows():
-    c = code_of(r.Entity)
-    if not c: continue
-    for sex, col in (("male", mcol), ("female", fcol)):
-        if not math.isnan(r[col]): rows[(c, sex)] = [r[col] / 100]
+for r in g.itertuples():
+    c = code_of(r.location_name)
+    if c: rows[(c, r.sex_name.lower())] = [r.val]
 rows = aggregate(rows, lambda c, sx: sexpop(c, sx, 15))
-write({"id": "health.smoker_daily", "version": 1, "label": "Smokes daily", "tier": 5,
-       "definition": "Smokes tobacco every day.",
+write({"id": "health.smoker", "version": 1, "label": "Smokes", "tier": 5,
+       "definition": "Currently smokes tobacco (cigarettes, pipes, cigars, bidis and similar), daily or occasionally.",
        "value_type": "boolean", "applies_when": {"trait": "frame.age", "op": "gte", "value": 15},
-       "phrases": {"true": "smokes daily", "false": "doesn't smoke daily"},
+       "phrases": {"true": "smokes", "false": "doesn't smoke"},
        "parents": ["frame.country", "frame.sex"],
        "baseline": {"keys": ["frame.country", "frame.sex"],
                     "backoff": [{"key": "frame.country", "via": "geo_hierarchy"}],
                     "dist_kind": "bernoulli", "table": table(rows)},
-       "modifiers": [], "ref_year": 2012, "source_ids": ["ihme_smoking_2012"], "grade": "B", "low_confidence": True,
-       "notes": ["Figures are for 2012 and smoking has fallen in many countries since.",
-                 "One rate per country and sex is applied to everyone aged 15 and over; differences by age are not modelled yet."]})
+       "modifiers": [], "ref_year": 2019, "source_ids": ["ihme_gbd_2019_smoking"], "grade": "A",
+       "notes": ["Rates are age-standardised: they describe a country as if it had a standard mix of ages, so the true share in a very young or very old population differs a little.",
+                 "One rate per country and sex is applied to everyone aged 15 and over. The published file has no breakdown by age, so differences between age groups are not modelled yet.",
+                 "Chewing tobacco and e-cigarettes are not included."]})
 
 # body.handedness   (meta-analyses)
 write({"id": "body.left_handed", "version": 1, "label": "Left-handed", "tier": 3,

@@ -45,10 +45,10 @@ The same seed always produces the same person. Adding a new trait never changes 
 | Age | country, sex | UN WPP 2024 | A |
 | Birth year, region, subregion | derived | UN WPP 2024 | A |
 | Urban or rural | country | UN World Urbanization Prospects 2018 | A |
-| Height (adults) | country, sex, birth cohort | NCD-RisC 2016 (means); spread is an assumption | A / D |
+| Height (adults) | country, sex, birth cohort, urban or rural | NCD-RisC 2016, 2020 and 2023 (means); spread is an assumption | A / D |
 | Education (15+) | country, sex, age group | Wittgenstein Centre v3 | A |
 | Left-handed | sex | Papadatou-Pastou et al. 2020 and 2008 | A |
-| Smokes daily (15+) | country, sex | IHME 2012 | B, dated |
+| Smokes (15+) | country, sex | IHME GBD 2019 | A |
 | Religion | country | Pew Research Center, 2020 estimates | A |
 | Sexual orientation (18+) | country, sex, generation | Ipsos 2023, 30 countries | C, rough |
 

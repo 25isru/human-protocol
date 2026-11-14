@@ -52,6 +52,8 @@ export function lookup(table: ConditionalTable, person: Person, reg: Registry) {
     if (step.via === "geo_hierarchy") {
       const g = reg.geo[exact[i]];
       if (g) alternatives[i] = [exact[i], `S:${g.subregion}`, `R:${g.region}`, "W"];
+    } else if (step.via === "drop") {
+      alternatives[i] = [exact[i], "*"];
     } else {
       const x = Number(exact[i]);
       alternatives[i] = [exact[i], ...step.order.filter((o) => o !== exact[i]).sort((a, b) => Math.abs(Number(a) - x) - Math.abs(Number(b) - x))];
@@ -189,7 +191,7 @@ function pass(reg: Registry, seed: string, pins: Record<string, Value>): { trait
         trace.backoff_steps = r.steps;
         trace.dist = r.dist;
         trace.modifiers = r.applied.map((a) => ({ id: a.m.id, beta: a.beta, weight: a.weight, mechanism: a.m.mechanism, rationale: a.m.rationale }));
-        trace.grade = worstGrade([spec.grade, ...r.applied.map((a) => a.m.grade)], r.steps.length);
+        trace.grade = worstGrade([spec.grade, ...r.applied.map((a) => a.m.grade)], r.steps.filter((x) => x.to !== "*").length);
         for (const a of r.applied) for (const s of a.m.source_ids) if (!trace.source_ids.includes(s)) trace.source_ids.push(s);
         if (id in pins) {
           value = pins[id];

@@ -47,6 +47,9 @@ export function groupLabel(s: Record<string, string>, reg: Registry, sexHint?: s
   let who = sex === "male" ? "men" : sex === "female" ? "women" : "people";
   if (s["frame.age_group"]) who += ` aged ${s["frame.age_group"].replace("--", " to ").replace("100+", "100 or over")}`;
   if (s["frame.birth_cohort"]) who += ` born ${s["frame.birth_cohort"]} to ${Number(s["frame.birth_cohort"]) + 4}`;
+  if (s["origin.setting"] === "*") { /* national figure */ }
+  if (s["origin.setting"] === "urban") who = `urban ${who}`;
+  if (s["origin.setting"] === "rural") who = `rural ${who}`;
   if (s["frame.country"]) who += ` in ${placeName(s["frame.country"], reg, worldLabel)}`;
   return who;
 }
@@ -75,7 +78,7 @@ export function explain(spec: TraitSpec, t: RolledTrait, reg: Registry, profile:
     lines.push(`The average for ${who} is ${d.mean.toFixed(1)} ${spec.unit ?? ""}, and most fall within ${d.sd.toFixed(1)} ${spec.unit ?? ""} of that.`);
     if (trace.percentile !== undefined) lines.push(`This person is ${spec.id === "body.height_cm" ? "taller" : "higher"} than about ${pct(trace.percentile)} of that group.`);
   } else if (d.kind === "bernoulli") {
-    lines.push(`About ${pct(d.p)} of ${who} ${spec.id === "body.left_handed" ? "are left-handed" : spec.id === "health.smoker_daily" ? "smoke daily" : "have this trait"}. This roll came up ${t.value ? "yes" : "no"}.`);
+    lines.push(`About ${pct(d.p)} of ${who} ${spec.id === "body.left_handed" ? "are left-handed" : spec.id === "health.smoker" ? "smoke" : "have this trait"}. This roll came up ${t.value ? "yes" : "no"}.`);
   } else if (trace.modifiers.length) {
     lines.push(`Starting from the figures for people in ${placeName(trace.stratum["frame.country"] ?? "W", reg, spec.world_label)} and applying the adjustments below, about ${pct(trace.probability!)} of people like this one fall in this category.`);
   } else {
@@ -84,7 +87,8 @@ export function explain(spec: TraitSpec, t: RolledTrait, reg: Registry, profile:
   for (const m of trace.modifiers) lines.push(`Adjustment applied: ${m.rationale}`);
   for (const b of trace.backoff_steps) {
     if (b.key === "frame.country") lines.push(`There is no figure for ${placeName(b.from, reg)}, so the average for ${placeName(b.to, reg, spec.world_label)} was used instead.`);
-    else if (b.key === "frame.birth_cohort") lines.push(`The data ends with people born in the late 1990s, so the most recent group (born ${b.to} to ${Number(b.to) + 4}) was used.`);
+    else if (b.key === "frame.birth_cohort") lines.push(`There is no figure for people born in ${b.from} to ${Number(b.from) + 4}, so the nearest group (born ${b.to} to ${Number(b.to) + 4}) was used.`);
+    else if (b.to === "*") lines.push("There is no separate urban or rural figure for this group, so the national figure was used.");
     else lines.push(`No exact match for ${b.from}; used ${b.to}.`);
   }
   return lines;
